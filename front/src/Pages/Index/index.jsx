@@ -19,7 +19,7 @@ const Index = props => {
             <div className='flex flex-wrap justify-center'>
                 {Object.keys(grupos).map((k,i) => {
                     const g = grupos[k];
-                    console.log(g);
+                    // console.log(g);
                     const base = originales.filter(b => b.group_image === k);
                     const upscales = g.filter(u => u.model !== 'Original');
                     const { name, url, fecha_carga, model, scale, group_image, general_group } = base[0];

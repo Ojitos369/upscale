@@ -204,8 +204,14 @@ class GetImages(GetApi):
             categorias = self.normalize_text(categorias).lower()
             categorias = categorias.replace(", ", ",").split(",")
             cat_join = "', '".join(categorias)
-            filtros += f"AND lower(c.nombre) in ('{cat_join}')\n"
-        
+            filtros += f"""AND i.general_group in (select distinct general_group
+                        FROM images i
+                        JOIN image_categoria ic
+                        ON i.id_image = ic.image_id
+                        JOIN categorias c
+                        ON ic.categoria_id = c.id_categoria
+                        where lower(c.nombre) in ('{cat_join}'))\n """
+
         if general_group:
             general_group = self.normalize_text(general_group).lower()
             filtros += "AND lower(i.general_group) = '{0}'\n".format(general_group)
@@ -225,9 +231,10 @@ class GetImages(GetApi):
                     JOIN categorias c
                     ON ic.categoria_id = c.id_categoria
                     {0}) t
-                    order by cast(t.fecha_carga as date) desc, t.general_group, t.group_image, t.name
+                    order by cast(t.fecha_carga as date) desc, t.general_group, t.group_image, t.name, t.categoria
                     """.format(filtros)
 
+        # print(query)
         r = self.conexion.consulta_asociativa(query, query_data)
         
         images = {}

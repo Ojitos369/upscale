@@ -8,7 +8,7 @@ const InfoCard = props => {
     const { f } = useStates();
     // console.log(props);
     const { name, url, fecha_carga, model, scale, group_image, general_group, upscales, Link, categorias } = props;
-    const cats = useMemo(() => categorias.filter(c => !['1x', '2x'].includes(c.nombre.toLowerCase())), [categorias]);
+    const cats = useMemo(() => categorias.filter(c => !['1x', 'original'].includes(c.nombre.toLowerCase())), [categorias]);
 
     const stylesBanner = useMemo(() => {
         if (url) {

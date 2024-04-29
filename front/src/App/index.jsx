@@ -1,6 +1,5 @@
 import { useEffect } from 'react';
 import { cambiarThema } from '../Core/helper';
-import { Theme } from '../Components/Theme';
 
 import { Main } from '../Pages/Main';
 import { Index } from '../Pages/Index';
@@ -19,7 +18,6 @@ const BgTheme = () => {
     return (
         <>
             <div className={`wipeInDown full-page-container bg-my-${ls.theme}`}></div>
-            <Theme />
         </>
     )
 }

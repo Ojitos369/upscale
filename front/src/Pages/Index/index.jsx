@@ -24,7 +24,7 @@ const Index = props => {
                     const upscales = g.filter(u => u.model !== 'Original');
                     const { name, url, fecha_carga, model, scale, group_image, general_group } = base[0];
                     return (
-                        <div key={i} className='w-1/3 p-2'>
+                        <div key={i} className='w-1/5 md:w-1/3 p-2'>
                             <div className='border border-[var(--my-minor)] rounded-lg p-2'>
                                 <img src={url} alt={name} className='w-full rounded-lg' />
                                 <div className='p-2'>

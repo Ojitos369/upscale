@@ -25,7 +25,6 @@ class StableDiffApi:
     def decode_and_save_base64(self, base64_str, save_path):
         with open(save_path, "wb") as file:
             file.write(base64.b64decode(base64_str))
-            self.images_procesadas.append(save_path)
 
     def call_api(self, api_endpoint, **payload):
         data = json.dumps(payload).encode('utf-8')
@@ -54,6 +53,7 @@ class StableDiffApi:
             path_save = f"{MEDIA_DIR}/img/img2img"
             save_path = os.path.join(path_save, name)
             self.decode_and_save_base64(image, save_path)
+            return save_path
 
     def change_model(self):
         payload = {
@@ -65,7 +65,7 @@ class StableDiffApi:
         print(response)
 
     def reescale(self, base, img_path, name, ext="jpg", scale=2):
-        image_base = f"{img_path}{name}.{ext}"
+        image_base = f"{img_path}/{name}.{ext}"
         init_images = [
             self.encode_file_to_base64(image_base),
         ]
@@ -97,10 +97,20 @@ class StableDiffApi:
             print(f"\nUpscaling {n}", end="... ")
             from ojitos369.utils import print_json as pj
             # pj(payload)
-            self.call_img2img_api(name=n ,**payload)
+            save_path = self.call_img2img_api(name=n ,**payload)
+            self.images_procesadas.append({
+                "path": save_path,
+                "model": model,
+                "scale": f"{scale}x"
+            })
             print("Done")
 
-        self.images_procesadas.append(image_base)
+        self.images_procesadas.append({
+            "path": image_base, 
+            "model": "Original",
+            "scale": "1x"
+        })
+
         print()
         print(f"-"*40)
     
@@ -111,14 +121,16 @@ class StableDiffApi:
         password = FTP_DATA["password"]
         path = "media/twice/ups"
         
-        ftp = FTP()
-        ftp.connect(host, port)
+        ftp = FTP(host)
         ftp.login(user, password)
+        ftp.cwd('domains/ojitos369.com/public_html')
         ftp.cwd(path)
-        
-        for image in self.images_procesadas:
+
+        for i in self.images_procesadas:
+            image = i["path"]
+            file_name = image.split("/")[-1]
             with open(image, 'rb') as file:
-                ftp.storbinary(f"STOR {image}", file)
+                ftp.storbinary(f"STOR {file_name}", file)
                 print(f"Archivo {image} subido a FTP")
             os.remove(image)
             print(f"Archivo {image} eliminado")

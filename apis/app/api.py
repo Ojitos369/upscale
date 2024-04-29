@@ -8,7 +8,7 @@ from ojitos369.utils import get_d
 from app.core.sd import StableDiffApi as SDA
 
 # User
-from app.core.bases.apis import PostApi, GetApi
+from app.core.bases.apis import PostApi, GetApi, pln
 from app.settings import MEDIA_DIR
 
 class UpdateInitData(PostApi, GetApi):
@@ -231,7 +231,7 @@ class GetImages(GetApi):
                     JOIN categorias c
                     ON ic.categoria_id = c.id_categoria
                     {0}) t
-                    order by cast(t.fecha_carga as date) desc, t.general_group, t.group_image, t.name, t.categoria
+                    order by t.fecha_carga desc, t.general_group, t.group_image, t.name, t.categoria
                     """.format(filtros)
 
         # print(query)
@@ -303,10 +303,127 @@ class GetCategorias(GetApi):
 class CreateImageUpscale(PostApi):
     def main(self):
         self.show_me()
+        self.create_conexion()
+        
+        pln(self.data)
+        base_name = self.data["base_name"]
+        
+        query = """SELECT count(*) cantidad
+                    FROM images
+                    WHERE general_group = %s 
+                    AND model = 'Original'
+                    """
+        query_data = (base_name,)
+        r = self.conexion.consulta_asociativa(query, query_data)
+        c = r[0]["cantidad"] + 1
+        
+        scale = int(get_d(self.data, "scale", default="2"))
+        cats = get_d(self.data, "cats", default="")
+        cats = cats.replace(", ", ",").split(",")
+        file = self.data["file"] # InMemoryUploadedFile
+        name = file.name
+        file = file.file
+        ext = name.split(".")[-1]
+        name = ".".join(name.split(".")[:-1])
+        
+        base_name_custom = f"{base_name}_{c}"
 
         path_save = f"{MEDIA_DIR}/img/img2img"
+        # save file in path_save
+        new_name = f"{base_name_custom}.{ext}"
+        save_path = os.path.join(path_save, new_name)
+        with open(save_path, "wb") as f:
+            f.write(file.read())
+
         sd = SDA()
 
         # base, name, ext, scale
+        sd.run(base=base_name_custom, name=base_name_custom, ext=ext, scale=scale, cats=cats)
+        files = sd.images_procesadas
+        # sd.images_procesadas = files = [{'path': '/home/ojitos369/Documents/progra/ojitos369/upscale/media/img/img2img/jy_ex_1_1_fr_2x.png', 'model': '4x_foolhardy_Remacri', 'scale': '2x'}, {'path': '/home/ojitos369/Documents/progra/ojitos369/upscale/media/img/img2img/jy_ex_1_1_snp_2x.png', 'model': 'ScuNET PSNR', 'scale': '2x'}, {'path': '/home/ojitos369/Documents/progra/ojitos369/upscale/media/img/img2img/jy_ex_1_1_pp_2x.png', 'model': '4xPurePhoto-span', 'scale': '2x'}, {'path': '/home/ojitos369/Documents/progra/ojitos369/upscale/media/img/img2img/jy_ex_1_1_d4_2x.png', 'model': 'DAT x4', 'scale': '2x'}, {'path': '/home/ojitos369/Documents/progra/ojitos369/upscale/media/img/img2img/jy_ex_1_1.jpg', 'model': 'Original', 'scale': '1x'}]
+        # print(files)
+        sd.move_to_ftp()
+        
+        query = """INSERT INTO images
+                    (name, url, model, fecha, scale, group_image, general_group)
+                    values
+                    (%s, %s, %s, now(), %s, %s, %s)
+                """
+        
+        url_base = f"https://ojitos369.com/media/twice/ups/"
+        
+        qc = """SELECT id_categoria
+                    FROM categorias
+                    WHERE upper(nombre) = %s """
+
+        for file in files:
+            path = file["path"]
+            name = path.split("/")[-1]
+
+            url = f"{url_base}{name}"
+            model = file["model"]
+            scale = file["scale"]
+            name = ".".join(name.split(".")[:-1])
+            group_image = name
+            general_group = base_name
+            
+            qd = (name, url, model, scale, base_name_custom, general_group)
+            
+            if not self.conexion.ejecutar(query, qd):
+                self.conexion.rollback()
+                raise self.MYE("Error al guardar la imagen")
+            self.conexion.commit()
+            
+            qt = """SELECT id_image
+                    FROM images
+                    WHERE name = %s
+                    and url = %s
+                    """
+            qdt = (name, url)
+            r = self.conexion.consulta_asociativa(qt, qdt)
+            image_id = r[0]["id_image"]
+            
+            temp_cats = [*cats]
+            if model not in temp_cats:
+                temp_cats.append(model)
+            if scale not in temp_cats:
+                temp_cats.append(scale)
+            
+            for cat in temp_cats:
+                name = cat.upper()
+                qcd = (name,)
+                r = self.conexion.consulta_asociativa(qc, qcd)
+                
+                if not r:
+                    bg = self.get_random_color()
+                    color = self.get_text_color(bg)
+                    
+                    qt = """insert into categorias
+                            (nombre, bg, color)
+                            values
+                            (%s, %s, %s) """
+                    qd = (name, bg, color)
+                    if not self.conexion.ejecutar(qt, qd):
+                        self.conexion.rollback()
+                        raise self.MYE("Error al guardar la categoria")
+                    self.conexion.commit()
+                    r = self.conexion.consulta_asociativa(qc, qcd)
+                id_categoria = r[0]["id_categoria"]
+                
+                
+                qt = """insert into image_categoria
+                        (image_id, categoria_id)
+                        values
+                        (%s, %s) """
+                qd = (image_id, id_categoria)
+                if not self.conexion.ejecutar(qt, qd):
+                    self.conexion.rollback()
+                    raise self.MYE("Error al guardar la categoria")
+                self.conexion.commit()
+        
+        self.response = {
+            "message": "Imagenes guardadas correctamente",
+        }
+
 
 

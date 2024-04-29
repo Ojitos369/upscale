@@ -130,6 +130,35 @@ const useF = props => {
         },
     }
 
+    const update = {
+        updateNew: form => {
+            if (s.loaders?.update?.updateNew) return;
+
+            u2('loaders', 'update', 'updateNew', true);
+            const end = 'app/create_image_upscale/';
+            const headers = {
+                'Connection': 'keep-alive',
+            };
+            miAxios.post(end, form, { headers })
+            .then(res => {
+                const { message } = res.data;
+                MySwal.fire({
+                    title: 'Update',
+                    text: message,
+                    icon: 'success',
+                    confirmButtonText: 'Ok'
+                });
+            })
+            .catch(err => {
+                console.log(err);
+            })
+            .finally(() => {
+                u2('loaders', 'update', 'updateNew', false);
+                
+            });
+        },
+    }
+
     // u[0-9]
     const u0 = (f0, value) => {
         d(ff.u0({f0, value}));
@@ -162,7 +191,7 @@ const useF = props => {
         d(ff.u9({f0, f1, f2, f3, f4, f5, f6, f7, f8, f9, value}));
     }
 
-    return { u0, u1, u2, u3, u4, u5, u6, u7, u8, u9, app, login };
+    return { u0, u1, u2, u3, u4, u5, u6, u7, u8, u9, app, login, update };
 }
 
 export { useF };

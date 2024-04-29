@@ -9,6 +9,7 @@ const Index = props => {
 
     const grupos = useMemo(() => s.app?.data?.grupos || [], [s.app?.data?.grupos]);
     const originales = useMemo(() => s.app?.data?.originales || [], [s.app?.data?.grupos]);
+    console.log(originales);
 
     useEffect(() => {
         f.app.getCategorias();
@@ -24,7 +25,7 @@ const Index = props => {
                 {Object.keys(grupos).map((k,i) => {
                     const g = grupos[k];
                     // console.log(g);
-                    const base = originales.filter(b => b.group_image === k);
+                    const base = originales.filter(b => b?.group_image === k);
                     const upscales = g.filter(u => u.model !== 'Original');
                     const d = {...base[0], upscales};
                     return (

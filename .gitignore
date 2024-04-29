@@ -34,3 +34,4 @@ venv
 
 front/*.lock*
 front/*lock.*
+media/img/img2img/*.*

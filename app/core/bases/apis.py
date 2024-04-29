@@ -80,7 +80,7 @@ class BaseApi(APIView):
         line = cf.f_back.f_lineno
         file_name = cf.f_back.f_code.co_filename
         
-        print_line_center(f"{class_name} - {file_name}:{line} ")
+        print(f"{class_name} - {file_name}:{line} - {datetime.datetime.now()}")
     
     def get_text_color(self, color):
         color = color.replace("#", "")

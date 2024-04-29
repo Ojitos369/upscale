@@ -52,7 +52,7 @@ const InfoCard = props => {
                                     className='rounded-lg px-2 text-sm font-semibold flex items-center justify-center manita'
                                     onClick={() => {
                                         const cats = [topic.nombre];
-                                        f.u2('show', 'filtros', 'cats', cats);
+                                        f.u2('app', 'filtros', 'cats', cats);
                                     }}
                                     style={{backgroundColor: topic.bg, color: topic.color}}>
                                     {topic.nombre}

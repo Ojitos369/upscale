@@ -82,7 +82,17 @@ const useF = props => {
             });
         },
         getImages: () => {
-            const end = 'app/get_images/';
+            const filtros = s.app?.filtros || {};
+            let end = 'app/get_images/?one=1';
+
+            if (!filtros.cats) {
+                if ((filtros.cats || []).length > 0) {
+                    // join cats with ',
+                    const cats = filtros.cats.join(',');
+                    end += `&cats=${cats}`;
+                }
+            }
+
             miAxios.get(end)
             .then(res => {
                 const { grupos } = res.data;

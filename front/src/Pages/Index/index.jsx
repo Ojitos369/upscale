@@ -12,8 +12,12 @@ const Index = props => {
 
     useEffect(() => {
         f.app.getCategorias();
-        f.app.getImages();
     }, []);
+
+    useEffect(() => {
+        f.app.getImages();
+    }, [s.app?.filtros]);
+
     return (
         <>
             <div className='flex flex-wrap justify-center'>

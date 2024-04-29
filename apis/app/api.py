@@ -31,8 +31,8 @@ class UpdateInitData(PostApi, GetApi):
             {"name": "mn_fd", "cantidad": 11, "cats": ["Mina", "Twice"]},
             {"name": "sn_bb", "cantidad": 40, "cats": ["Sana", "Twice"]},
             {"name": "cy_ig_2", "cantidad": 1, "cats": ["Chaeyoung", "Twice"]},
-            {"name": "mm_ig_1", "cantidad": 10, "cats": ["Chaeyoung", "Twice"]},
-            {"name": "mm_ig_2", "cantidad": 7, "cats": ["Chaeyoung", "Twice"]},
+            {"name": "mm_ig_1", "cantidad": 10, "cats": ["Momo", "Twice"]},
+            {"name": "mm_ig_2", "cantidad": 7, "cats": ["Momo", "Twice"]},
         ]
         
         query_gg = """SELECT distinct general_group
@@ -283,6 +283,7 @@ class GetCategorias(GetApi):
         query = """SELECT id_categoria, nombre, bg, color
                     FROM categorias
                     {0}
+                    order by nombre
                     """.format(filtro)
 
         # print(filtro)

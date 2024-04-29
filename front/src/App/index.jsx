@@ -2,7 +2,10 @@ import { useEffect } from 'react';
 import { cambiarThema } from '../Core/helper';
 import { Theme } from '../Components/Theme';
 
+import { Main } from '../Pages/Main';
 import { Index } from '../Pages/Index';
+import { Update } from '../Pages/Update';
+import { Show } from '../Pages/Show';
 import { Test } from '../Pages/Test';
 import { Route, Routes, Navigate } from 'react-router-dom';
 
@@ -22,31 +25,34 @@ const BgTheme = () => {
 }
 
 function AppUI() {
-    const { ls } = useStates();
+    const { ls, s, f } = useStates();
 
     useEffect(() => {
         cambiarThema(ls?.theme);
     }, [ls?.theme]);
+
+    useEffect(() => {
+        const title = s.page?.title || "Upscale Images";
+        document.title = title;
+    }, [s.page?.title]);
+
+    useEffect(() => {
+        f.login.validateLogin();
+    }, []);
 
     return (
         <div className={`text-[var(--my-minor)]`}>
             <BgTheme />
             <Routes>
                 {/* -----------   Index   ----------- */}
-                <Route
-                    path="/"
-                    element={
-                        <Index />
-                    }
-                />
+                <Route path="" element={<Main />} >
+                    <Route path="" element={<Index />} />
+                    <Route path="update" element={<Update />} />
+                    <Route path="show/:group" element={<Show />} />
+                </Route>
                 {/* -----------   /Index   ----------- */}
                 {/* -----------   Test   ----------- */}
-                <Route
-                    path="test"
-                    element={
-                        <Test />
-                    }
-                />
+                <Route path="test" element={<Test />} />
                 {/* -----------   /Test   ----------- */}
 
                 {/* -----------   404   ----------- */}

@@ -184,3 +184,12 @@ DB_DATA = {
     "port": os.environ.get('DB_PORT', 3306),
     "name": os.environ.get('DB_NAME', None),
 }
+
+# --------------------------------------   FTP   -------------------------------------- #
+FTP_DATA = {
+    "host": os.environ.get('FTP_HOST', None),
+    "port": os.environ.get('FTP_PORT', None),
+    "user": os.environ.get('FTP_USER', None),
+    "password": os.environ.get('FTP_PASS', None),
+    "path": os.environ.get('FTP_PATH', None),
+}

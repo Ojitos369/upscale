@@ -5,10 +5,13 @@ import json
 # Ojitos369
 from ojitos369.utils import get_d
 
+from app.core.sd import StableDiffApi as SDA
+
 # User
 from app.core.bases.apis import PostApi, GetApi
+from app.settings import MEDIA_DIR
 
-class UpdateData(PostApi, GetApi):
+class UpdateInitData(PostApi, GetApi):
     def main(self):
         self.show_me()
         
@@ -155,8 +158,7 @@ class GetImages(GetApi):
         self.show_me()
         
         self.create_conexion()
-        
-        print(self.data)
+        # print(self.data)
         name = get_d(self.data, "name", default=None)
         model = get_d(self.data, "model", default=None)
         fi = get_d(self.data, "fi", default=None) # fecha_inicio
@@ -190,12 +192,12 @@ class GetImages(GetApi):
         
         if scale:
             scale = self.normalize_text(scale).lower()
-            filtros += "AND lower(i.scale) = '{0}}'\n".format(scale)
+            filtros += "AND lower(i.scale) = '{0}'\n".format(scale)
             # query_data.append(scale)
         
         if group_image:
             group_image = self.normalize_text(group_image).lower()
-            filtros += "AND lower(i.group_image) = '{0}}'\n".format(group_image)
+            filtros += "AND lower(i.group_image) = '{0}'\n".format(group_image)
             # query_data.append(group_image)
         
         if categorias:
@@ -206,24 +208,26 @@ class GetImages(GetApi):
         
         if general_group:
             general_group = self.normalize_text(general_group).lower()
-            filtros += "AND lower(i.general_group) = '{0}}'\n".format(general_group)
+            filtros += "AND lower(i.general_group) = '{0}'\n".format(general_group)
             # query_data.append(general_group)
         
-            
-            
-        
-        query = """SELECT i.id_image, i.name, i.url, i.fecha fecha_carga, i.model, i.scale, i.group_image, i.general_group, c.nombre as categoria
+        query = """select t.*
+                    from (SELECT i.id_image, i.name, i.url, 
+                            (select min(fecha) 
+                                from images
+                                where general_group = i.general_group
+                            ) fecha_carga, 
+                            i.model, i.scale, i.group_image, i.general_group, c.nombre as categoria,
+                            c.bg, c.color
                     FROM images i
                     JOIN image_categoria ic
                     ON i.id_image = ic.image_id
                     JOIN categorias c
                     ON ic.categoria_id = c.id_categoria
-                    {0}
-                    order by cast(i.fecha as date) desc, i.general_group, i.group_image, i.name
+                    {0}) t
+                    order by cast(t.fecha_carga as date) desc, t.general_group, t.group_image, t.name
                     """.format(filtros)
-        
-        # print(query)
-        # print(query_data)
+
         r = self.conexion.consulta_asociativa(query, query_data)
         
         images = {}
@@ -241,7 +245,12 @@ class GetImages(GetApi):
                     "general_group": i["general_group"],
                     "categorias": []
                 }
-            images[image_id]["categorias"].append(i["categoria"])
+            cat = {
+                "nombre": i["categoria"],
+                "bg": i["bg"],
+                "color": i["color"]
+            }
+            images[image_id]["categorias"].append(cat)
         
         images = [i for i in images.values()]
         
@@ -281,4 +290,15 @@ class GetCategorias(GetApi):
         r = self.conexion.consulta_asociativa(query, query_data)
         
         self.response = r
+
+
+class CreateImageUpscale(PostApi):
+    def main(self):
+        self.show_me()
+
+        path_save = f"{MEDIA_DIR}/img/img2img"
+        sd = SDA()
+
+        # base, name, ext, scale
+
 

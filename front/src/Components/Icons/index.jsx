@@ -9,14 +9,15 @@ const GeneralSimple = props => {
     const icon = props.icon || '';
     const primary = props.primary || props.class1 || '';
     const fillPrimary = props.fillPrimary || props.fill1 || '';
-    const className = props.className || `icon ${icon || simple[`${name}_icon`]}` || '';
-    const classPrimary = props.classPrimary || primary || (!fillPrimary && simple[`${name}_primary`]) || '';
+    const className = props.className || `icon ${icon || simple[`${name}`]}` || '';
+    const classPrimary = props.classPrimary || primary || (!fillPrimary && simple[`primary`]) || '';
     const style = props.style || {};
     const stylePrimary = props.stylePrimary || props.style1 || {};
 
     return (
         <svg 
             xmlns="http://www.w3.org/2000/svg" 
+            onClick={props.onClick}
             className={className}
             style={style}
             viewBox="0 0 576 512">
@@ -37,9 +38,9 @@ const GeneralDoble = props => {
     const secondary = props.secondary || props.class2 || '';
     const fillPrimary = props.fillPrimary || props.fill1 || '';
     const fillSecondary = props.fillSecondary || props.fill2 || '';
-    const className = props.className || `icon ${icon || dobles[`${name}_icon`]}` || '';
-    const classPrimary = props.classPrimary || primary || (!fillPrimary && dobles[`${name}_primary`]) || '';
-    const classSecondary = props.classSecondary || secondary || (!fillSecondary && dobles[`${name}_secondary`]) || '';
+    const className = props.className || `icon ${icon || dobles[`${name}`]}` || '';
+    const classPrimary = props.classPrimary || primary || (!fillPrimary && dobles[`primary`]) || '';
+    const classSecondary = props.classSecondary || secondary || (!fillSecondary && dobles[`secondary`]) || '';
     const style = props.style || {};
     const stylePrimary = props.stylePrimary || props.style1 || {};
     const styleSecondary = props.styleSecondary || props.style2 || {};
@@ -47,6 +48,7 @@ const GeneralDoble = props => {
     return (
         <svg 
             xmlns="http://www.w3.org/2000/svg" 
+            onClick={props.onClick}
             className={className}
             style={style}
             viewBox="0 0 576 512">
@@ -161,6 +163,32 @@ const Moon = props => {
             />
     )
 }
+const FilterList = props => {
+    const name = 'filter_list';
+    const d1="M3.5 87.7C9.9 73.3 24.2 64 40 64H312c15.8 0 30.1 9.3 36.5 23.7s3.8 31.3-6.8 43L240 243.8V416c0 12.1-6.8 23.2-17.7 28.6s-23.8 4.3-33.5-3l-64-48c-8.1-6-12.8-15.5-12.8-25.6V243.8L10.3 130.8C-.3 119-3 102.2 3.5 87.7z";
+    const d2="M416 64h64c17.7 0 32 14.3 32 32s-14.3 32-32 32H416c-17.7 0-32-14.3-32-32s14.3-32 32-32zM320 256c0-17.7 14.3-32 32-32H480c17.7 0 32 14.3 32 32s-14.3 32-32 32H352c-17.7 0-32-14.3-32-32zm0 160c0-17.7 14.3-32 32-32H480c17.7 0 32 14.3 32 32s-14.3 32-32 32H352c-17.7 0-32-14.3-32-32z";
+    return (
+        <GeneralDoble
+            name={name}
+            d1={d1}
+            d2={d2}
+            {...props}
+            />
+    )
+}
+const DownloadIcon = props => {
+    const name = 'download';
+    const d1="M178.7 352H64c-35.3 0-64 28.7-64 64v32c0 35.3 28.7 64 64 64H448c35.3 0 64-28.7 64-64V416c0-35.3-28.7-64-64-64H333.3l-54.6 54.6c-12.5 12.5-32.8 12.5-45.3 0L178.7 352zM408 432a24 24 0 1 1 48 0 24 24 0 1 1 -48 0z";
+    const d2="M256 0c17.7 0 32 14.3 32 32V306.7l73.4-73.4c12.5-12.5 32.8-12.5 45.3 0s12.5 32.8 0 45.3l-128 128c-12.5 12.5-32.8 12.5-45.3 0l-128-128c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0L224 306.7V32c0-17.7 14.3-32 32-32z";
+    return (
+        <GeneralDoble
+            name={name}
+            d1={d1}
+            d2={d2}
+            {...props}
+            />
+    )
+}
 
 export { 
     AnimateEdit,
@@ -169,4 +197,6 @@ export {
     Pause,
     Sun,
     Moon,
- };
+    FilterList,
+    DownloadIcon,
+};

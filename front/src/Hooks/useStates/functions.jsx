@@ -19,6 +19,56 @@ const useF = props => {
     const s = useSelector(state => state.fs.s);
     const d = useDispatch();
 
+    const login = {
+        login: () => {
+            u2('loaders', 'login', 'login', true);
+            const end = 'user/login/';
+            const data = s.menu?.login;
+            u2('menu', 'login', 'error', '');
+
+            miAxios.post(end, data)
+            .then(response => {
+                const user = response.data.user;
+                const token = user.token;
+                document.cookie = `tups=${token}; max-age=18000; path=/`;
+                u2('menu', 'modal', 'mode', 'menu');
+                u1('menu', 'login', {});
+                u2('login', 'data', 'user', user);
+                u2('modals', 'header', 'showMenu', false);
+            }).catch(error => {
+                const message = error.response.data.message;
+                u2('menu', 'login', 'error', message);
+            }).finally(() => {
+                u2('loaders', 'login', 'login', false);
+            });
+        },
+        validateLogin: () => {
+            const end = 'user/validate_login/';
+            // get tups cookie
+            miAxios.get(end)
+            .then(response => {
+                const user = response.data.user;
+                u2('login', 'data', 'user', user);
+            }).catch(error => {
+                console.log(error);
+                u2('login', 'data', 'user', {});
+                document.cookie = `tups=; max-age=0; path=/`;
+            })
+        },
+        closeSession: () => {
+            u2('loaders', 'login', 'closeSession', true);
+            const end = 'user/close_session/';
+
+            miAxios.get(end)
+            .finally(() => {
+                u2('login', 'data', 'user', {});
+                document.cookie = 'tups=; max-age=0; path=/';
+                u2('modals', 'header', 'showMenu', false);
+                u2('loaders', 'login', 'closeSession', false);
+            });
+        }
+    }
+
     const app = {
         getCategorias: () => {
             const end = 'app/get_categorias/';
@@ -36,20 +86,36 @@ const useF = props => {
             miAxios.get(end)
             .then(res => {
                 const { grupos } = res.data;
-                console.log(grupos);
+                // console.log(grupos);
                 const originales = Object.keys(grupos).map(k => {
                     const grupo = grupos[k];
                     return grupo.filter(i => i.model === 'Original')[0];
                 })
 
-                console.log(originales);
+                // console.log(originales);
                 u2('app', 'data', 'grupos', grupos);
                 u2('app', 'data', 'originales', originales);
             })
             .catch(err => {
                 console.log(err);
             });
-        }
+        },
+        getGroupImages: grupo => {
+            if (!!s.app?.data?.grupos[grupo]) {
+                u2('app', 'show', 'images', s.app?.data?.grupos[grupo]);
+            } else {
+                const end = `app/get_images/?gi=${grupo}`;
+                const data = { grupo };
+                miAxios.get(end)
+                .then(res => {
+                    const images = res.data.grupos[grupo]
+                    u2('app', 'show', 'images', images);
+                })
+                .catch(err => {
+                    console.log(err);
+                });
+            }
+        },
     }
 
     // u[0-9]
@@ -84,7 +150,7 @@ const useF = props => {
         d(ff.u9({f0, f1, f2, f3, f4, f5, f6, f7, f8, f9, value}));
     }
 
-    return { u0, u1, u2, u3, u4, u5, u6, u7, u8, u9, app };
+    return { u0, u1, u2, u3, u4, u5, u6, u7, u8, u9, app, login };
 }
 
 export { useF };

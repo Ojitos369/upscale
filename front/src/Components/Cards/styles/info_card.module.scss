@@ -1,0 +1,105 @@
+.cardInfo_container {
+    display: flex;
+    flex-direction: column;
+    justify-content: start;
+    align-items: center;
+
+    width: 240px;
+    height: 300px;
+    border-radius: 15px;
+    // border: var(--my-minor) solid 1px;
+    box-shadow: 0 0 15px 0 var(--my-primary);
+    overflow: hidden;
+    &:hover {
+        overflow-y: scroll;
+
+        &::-webkit-scrollbar {
+            width: 3px !important;
+            height: 3px !important;
+        }
+
+        .cardInfo_title {
+            a {
+                text-align: center;
+                background: linear-gradient(90deg, #065d1c 0%, #0a9e25 25%, #3ce95e 50%, #0a9e25 75%, #065d1c 100%);
+                background-size: 200% auto;
+                
+                color: #0000;
+                background-clip: text;
+                -webkit-background-clip: text;
+                -webkit-text-fill-color: transparent;
+
+                text-decoration: underline;
+
+                animation: titleEffect 1s linear infinite;
+            }
+        }
+    }
+
+    .cardInfo_head {
+        display: flex;
+        justify-content: end;
+        align-items: start;
+        width: 100%;
+        height: 150px;
+        .cardInfo_head_span {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px;
+            width: auto;
+            background-color: #0006;
+            border-radius: 0 0 0 15px;
+            color: #fff;
+        }
+    }
+    .cardInfo_body {
+        width: 100%;
+        height: 150px;
+        padding: 15px;
+        .cardInfo_title {
+            width: 100%;
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 3px;
+            a {
+                text-decoration: none;
+                color: var(--my-primary);
+            }
+        }
+        .cardInfo_description {
+            width: 100%;
+            font-size: 0.8rem;
+        }
+        .cardInfo_categorias {
+            .cardInfo_topics {
+                .cardInfo_topic {
+                    padding: 10px;
+                    width: auto;
+                    margin-bottom: 10px;
+                    border-radius: 8px;
+                    span {
+                        align-items: center;
+                        width: auto;
+                        padding: 5px 10px;
+                        border-radius: 15px;
+                        text-align: center;
+                        white-space: nowrap;
+                        svg {
+                            display: inline;
+                            width: 20px;
+                            height: 20px;
+                            margin-left: 15px;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+@keyframes titleEffect {
+    to {
+        background-position: 200% center;
+    }
+}

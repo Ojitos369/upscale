@@ -20,11 +20,31 @@ const useF = props => {
     const d = useDispatch();
 
     const app = {
-        helloWorld: () => {
-            const end = 'app/hello_world/';
+        getCategorias: () => {
+            const end = 'app/get_categorias/';
             miAxios.get(end)
             .then(res => {
-                console.log(res.data);
+                const categorias = res.data;
+                u2('app', 'data', 'categorias', categorias);
+            })
+            .catch(err => {
+                console.log(err);
+            });
+        },
+        getImages: () => {
+            const end = 'app/get_images/';
+            miAxios.get(end)
+            .then(res => {
+                const { grupos } = res.data;
+                console.log(grupos);
+                const originales = Object.keys(grupos).map(k => {
+                    const grupo = grupos[k];
+                    return grupo.filter(i => i.model === 'Original')[0];
+                })
+
+                console.log(originales);
+                u2('app', 'data', 'grupos', grupos);
+                u2('app', 'data', 'originales', originales);
             })
             .catch(err => {
                 console.log(err);

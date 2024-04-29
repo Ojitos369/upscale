@@ -102,13 +102,30 @@ class BaseApi(APIView):
     def get_random_color(self):
         color = f"#{os.urandom(3).hex()}"
         return color
-    
+
+    def normalize_text(self, text: str, acentos=True, transform=None):
+        while '  ' in text:
+            text = text.replace('  ', ' ')
+        text = text.strip()
+        if acentos:
+            text = text.replace('á', 'a').replace('é', 'e').replace('í', 'i').replace('ó', 'o').replace('ú', 'u')
+            text = text.replace('Á', 'A').replace('É', 'E').replace('Í', 'I').replace('Ó', 'O').replace('Ú', 'U')
+        if transform:
+            text = transform(text)
+
+        return text
+
     def exec(self, request, **kwargs):
         self.request = request
         self.kwargs = kwargs
         try:
             if self.request.method in ('POST', 'PUT', 'PATCH'):
                 self.get_post_data()
+            elif self.request.method == 'GET':
+                data = self.request.query_params
+                self.data = {}
+                for key, value in data.items():
+                    self.data[key] = value
             self.validate_session()
             self.main()
         except Exception as e:

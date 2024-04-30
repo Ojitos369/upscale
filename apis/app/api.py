@@ -201,36 +201,31 @@ class GetImages(GetApi):
         por_pagina = get_d(self.data, "por_pagina", default=25)
 
         filtros = "WHERE 1=1\n"
-        query_data = []
+        filtros_pre_paginacion = "WHERE 1=1\n"
         
         if name:
             name = self.normalize_text(name).lower()
             filtros += "AND lower(i.name) like {0}\n".format(f"'%{name}%'")
-            # query_data.append(f"'%{name}%'")
+            filtros_pre_paginacion += "AND lower(i.name) like {0}\n".format(f"'%{name}%'")
         
         if model:
             model = self.normalize_text(model).lower()
             filtros += "AND lower(i.model) like {0}\n".format(f"'%{model}%'")
-            # query_data.append(f"%{model}%")
         
         if fi:
             # fi dd/mm/yyyy
             # i.date date field
             filtros += "AND cast(i.fecha as date) >= {0}\n".format(f"'{fi}'")
-            # query_data.append(fi)
         if ff:
             filtros += "AND cast(i.fecha as date) <= {0}\n".format(f"'{ff}'")
-            # query_data.append(ff)
         
         if scale:
             scale = self.normalize_text(scale).lower()
             filtros += "AND lower(i.scale) = '{0}'\n".format(scale)
-            # query_data.append(scale)
         
         if group_image:
             group_image = self.normalize_text(group_image).lower()
             filtros += "AND lower(i.group_image) = '{0}'\n".format(group_image)
-            # query_data.append(group_image)
         
         if categorias:
             categorias = self.normalize_text(categorias).lower()
@@ -247,10 +242,9 @@ class GetImages(GetApi):
         if general_group:
             general_group = self.normalize_text(general_group).lower()
             filtros += "AND lower(i.general_group) = '{0}'\n".format(general_group)
-            # query_data.append(general_group)
+        
         
         filtros_paginacion = "WHERE 1=1\n"
-        
         if por_pagina:
             por_pagina = int(por_pagina) # 5
             pagina = int(pagina) # 1
@@ -270,17 +264,22 @@ class GetImages(GetApi):
                                 ON i.id_image = ic.image_id
                             JOIN categorias c
                                 ON ic.categoria_id = c.id_categoria
-                            Join (select t1.group_image
-                                    from (select distinct t.fecha_carga, t.group_image
-                                        from (select (select min(fecha)
-                                                        from images
-                                                        where general_group = i.general_group ) fecha_carga,
-                                                    group_image,
-                                                    model
-                                                from images i
-                                                group by general_group, group_image, model) t
-                                        where t.model = 'Original'
-                                        order by 1 desc) t1
+                            Join (select distinct t1.group_image
+                                    from (select pt.*
+                                        from (SELECT i.id_image, i.name, i.url, 
+                                                (select min(fecha) 
+                                                    from images
+                                                    where general_group = i.general_group
+                                                ) fecha_carga, 
+                                                i.model, i.scale, i.group_image, i.general_group, c.nombre as categoria,
+                                                c.bg, c.color
+                                        FROM images i
+                                        JOIN image_categoria ic
+                                        ON i.id_image = ic.image_id
+                                        JOIN categorias c
+                                        ON ic.categoria_id = c.id_categoria
+                                        {0}) pt
+                                        order by pt.fecha_carga desc, pt.general_group, pt.group_image, pt.name, pt.categoria) t1
                                     {1}) lim
                                 ON i.group_image = lim.group_image
                             {0}
@@ -288,9 +287,29 @@ class GetImages(GetApi):
                     order by t.fecha_carga desc, t.general_group, t.group_image, t.name, t.categoria
                     """.format(filtros, filtros_paginacion)
 
-        # print(query)
-        r = self.conexion.consulta_asociativa(query, query_data)
+        print(query)
+        r = self.conexion.consulta_asociativa(query)
         
+        qc = """select distinct t.group_image
+                    from (SELECT i.id_image, i.name, i.url,
+                                (select min(fecha)
+                                from images
+                                where general_group = i.general_group) fecha_carga,
+                            i.model, i.scale, i.group_image, i.general_group, c.nombre as categoria,
+                            c.bg, c.color
+                        FROM images i
+                            JOIN image_categoria ic
+                                ON i.id_image = ic.image_id
+                            JOIN categorias c
+                                ON ic.categoria_id = c.id_categoria
+                            {0}
+                        ) t
+                    order by t.fecha_carga desc, t.general_group, t.group_image, t.name, t.categoria
+                    """.format(filtros, filtros_paginacion)
+        
+        rc = self.conexion.consulta_asociativa(qc)
+        cantidad = len(rc)
+
         images = {}
         for i in r:
             image_id = i["id_image"]
@@ -321,11 +340,10 @@ class GetImages(GetApi):
                 grupos[i["group_image"]] = []
             grupos[i["group_image"]].append(i)
         
-        cantidad = len(images)
         pagina = pagina
         por_pagina = por_pagina
         if por_pagina:
-            paginas = (cantidad // por_pagina) + 1 if cantidad % por_pagina else cantidad // por_pagina
+            paginas = cantidad // por_pagina
         else:
             paginas = pagina
         

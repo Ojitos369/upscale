@@ -50,7 +50,7 @@ const useF = props => {
                 const user = response.data.user;
                 u2('login', 'data', 'user', user);
             }).catch(error => {
-                console.log(error);
+                // console.log(error);
                 u2('login', 'data', 'user', {});
                 document.cookie = `tups=; max-age=0; path=/`;
             })
@@ -86,10 +86,16 @@ const useF = props => {
 
             u2('loaders', 'app', 'getImages', true);
 
-            const filtros = s.app?.filtros || {};
+            let filtros = {...s.app?.filtros || {}};
+            const paginador = {...s.app?.paginador || {}};
+            const pagina = paginador.pagina || 1;
+            const por_pagina = paginador.por_pagina || 20;
 
-            console.log("filtros", filtros);
-            let end = 'app/get_images/?one=1';
+            filtros.pagina = pagina;
+            filtros.por_pagina = por_pagina;
+
+            // console.log("filtros", filtros);
+            let end = `app/get_images/?pagina=${pagina}&por_pagina=${por_pagina}`;
 
             if (!!filtros.cats) {
                 if ((filtros.cats || []).length > 0) {
@@ -101,7 +107,9 @@ const useF = props => {
 
             miAxios.get(end)
             .then(res => {
-                const { grupos } = res.data;
+                const { grupos, paginas } = res.data;
+
+                u2('app', 'paginador', 'paginas', paginas);
 
                 let cats = {};
                 Object.keys(grupos).forEach(k => {

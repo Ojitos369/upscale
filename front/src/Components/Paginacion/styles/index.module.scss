@@ -1,0 +1,31 @@
+.paginacion_row {
+    .paginacion {
+        .paginacion_item {
+            cursor: pointer;
+            border: 1px solid var(--my-minor);
+            color: var(--my-minor);
+            box-shadow: -1px -1px 4px -1px var(--my-primary), 1px 1px 4px -1px var(--my-minor);
+            padding: 5px 10px;
+            transition: all 0.3s;
+            border-radius: 8px;
+            margin-left: 40px;
+            &:hover {
+                background-color: var(--my-primary);
+                color: var(--my-minor);
+                box-shadow: -1px -1px 4px -1px var(--my-minor), 1px 1px 4px -1px var(--my-primary);
+            }
+            &.paginacion_item_active {
+                cursor: default;
+                border: 1px solid var(--my-primary);
+                background-color: var(--my-minor);
+                color: var(--my-primary);
+                box-shadow: -1px -1px 4px -1px var(--my-primary), 1px 1px 4px -1px var(--my-minor);
+                &:hover {
+                    background-color: var(--my-minor);
+                    color: var(--my-primary);
+                    box-shadow: -1px -1px 4px -1px var(--my-primary), 1px 1px 4px -1px var(--my-minor);
+                }
+            }
+        }
+    }
+}

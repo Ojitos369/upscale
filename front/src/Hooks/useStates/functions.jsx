@@ -98,10 +98,29 @@ const useF = props => {
             miAxios.get(end)
             .then(res => {
                 const { grupos } = res.data;
+
+                let cats = {};
+                Object.keys(grupos).forEach(k => {
+                    const grupo = grupos[k];
+                    grupo.forEach(i => {
+                        if (!cats[i.group_image]) {
+                            cats[i.group_image] = [];
+                        }
+                        const cs = i.categorias || [];
+                        cs.forEach(c => {
+                            const added = cats[i.group_image].filter(cat => cat.nombre === c.nombre);
+                            if (added.length === 0) {
+                                cats[i.group_image].push(c);
+                            }
+                        });
+                    });
+                });
                 // console.log(grupos);
                 const originales = Object.keys(grupos).map(k => {
                     const grupo = grupos[k];
-                    return grupo.filter(i => i.model === 'Original')[0];
+                    let ng = grupo.filter(i => i.model === 'Original')[0];
+                    ng.categorias = cats[k];
+                    return ng;
                 })
 
                 // console.log(originales);

@@ -400,7 +400,7 @@ class CreateImageUpscale(PostApi):
                 group_image = name
                 general_group = base_name
                 
-                qd = (name, url, model, scale, base_name_custom, general_group)
+                qd = (name, url, model, scale, base_name_custom, general_group, )
                 
                 pln(query, qd)
                 
@@ -414,7 +414,7 @@ class CreateImageUpscale(PostApi):
                         WHERE name = %s
                         and url = %s
                         """
-                qdt = (name, url)
+                qdt = (name, url, )
                 r = self.conexion.consulta_asociativa(qt, qdt)
                 image_id = r[0]["id_image"]
                 
@@ -437,7 +437,7 @@ class CreateImageUpscale(PostApi):
                                 (nombre, bg, color)
                                 values
                                 (%s, %s, %s) """
-                        qd = (name, bg, color)
+                        qd = (name, bg, color, )
                         if not self.conexion.ejecutar(qt, qd):
                             self.conexion.rollback()
                             raise self.MYE("Error al guardar la categoria")
@@ -450,7 +450,7 @@ class CreateImageUpscale(PostApi):
                             (image_id, categoria_id)
                             values
                             (%s, %s) """
-                    qd = (image_id, id_categoria)
+                    qd = (image_id, id_categoria, )
                     if not self.conexion.ejecutar(qt, qd):
                         self.conexion.rollback()
                         raise self.MYE("Error al guardar la categoria")

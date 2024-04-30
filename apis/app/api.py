@@ -305,7 +305,7 @@ class CreateImageUpscale(PostApi):
         self.show_me()
         self.create_conexion()
         
-        pln(self.data)
+        # pln(self.data)
         base_name = self.data["base_name"]
         
         query = """SELECT count(*) cantidad
@@ -404,7 +404,7 @@ class CreateImageUpscale(PostApi):
                 
                 qrt = query.format(*qd)
                 
-                pln(qrt)
+                # pln(qrt)
                 if not self.conexion.ejecutar(qrt):
                     self.conexion.rollback()
                     raise self.MYE("Error al guardar la imagen")

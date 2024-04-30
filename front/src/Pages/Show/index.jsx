@@ -26,7 +26,7 @@ const Show = props => {
     }, [group]);
 
     return (
-        <div className='flex flex-wrap justify-around'>
+        <div className='flex flex-wrap justify-around mb-5'>
             <h2 className='w-full text-center mt-5 text-2xl font-bold'>
                 {group}
             </h2>

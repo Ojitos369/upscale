@@ -20,26 +20,24 @@ const Index = props => {
     }, [s.app?.filtros]);
 
     return (
-        <>
-            <div className='flex flex-wrap justify-center'>
-                {Object.keys(grupos).map((k,i) => {
-                    const g = grupos[k];
-                    const base = originales.filter(b => b?.group_image === k);
-                    const upscales = g.filter(u => u.model !== 'Original');
-                    const d = {...base[0], upscales};
-                    const unique = `show-${d.name}-${d.id_image}-${i}`;
-                    return (
-                        <div key={unique} className={`w-10/12 md:w-1/4 flex justify-center px-3 ${unique}`} id={unique} >
-                            <InfoCard
-                                index={i + 1}
-                                Link={Link}
-                                {...d}
-                            />
-                        </div>
-                    )
-                })}
-            </div>
-        </>
+        <div className='flex flex-wrap justify-center mb-5'>
+            {Object.keys(grupos).map((k,i) => {
+                const g = grupos[k];
+                const base = originales.filter(b => b?.group_image === k);
+                const upscales = g.filter(u => u.model !== 'Original');
+                const d = {...base[0], upscales};
+                const unique = `show-${d.name}-${d.id_image}-${i}`;
+                return (
+                    <div key={unique} className={`w-10/12 md:w-1/4 flex justify-center px-3 ${unique}`} id={unique} >
+                        <InfoCard
+                            index={i + 1}
+                            Link={Link}
+                            {...d}
+                        />
+                    </div>
+                )
+            })}
+        </div>
     )
 }
 

@@ -196,7 +196,10 @@ class GetImages(GetApi):
         group_image = get_d(self.data, "gi", default=None)
         general_group = get_d(self.data, "gg", default=None)
         categorias = get_d(self.data, "cats", default=None)
-        
+
+        pagina = get_d(self.data, "pagina", default=1)
+        por_pagina = get_d(self.data, "por_pagina", default=None)
+
         filtros = "WHERE 1=1\n"
         query_data = []
         
@@ -246,22 +249,44 @@ class GetImages(GetApi):
             filtros += "AND lower(i.general_group) = '{0}'\n".format(general_group)
             # query_data.append(general_group)
         
+        filtros_paginacion = "WHERE 1=1\n"
+        
+        if por_pagina:
+            por_pagina = int(por_pagina) # 5
+            pagina = int(pagina) # 1
+            offset = (pagina - 1) * por_pagina # 0
+            filtros_paginacion += f"LIMIT {por_pagina} OFFSET {offset}\n"
+        
+        
         query = """select t.*
-                    from (SELECT i.id_image, i.name, i.url, 
-                            (select min(fecha) 
+                    from (SELECT i.id_image, i.name, i.url,
+                                (select min(fecha)
                                 from images
-                                where general_group = i.general_group
-                            ) fecha_carga, 
+                                where general_group = i.general_group) fecha_carga,
                             i.model, i.scale, i.group_image, i.general_group, c.nombre as categoria,
                             c.bg, c.color
-                    FROM images i
-                    JOIN image_categoria ic
-                    ON i.id_image = ic.image_id
-                    JOIN categorias c
-                    ON ic.categoria_id = c.id_categoria
-                    {0}) t
+                        FROM images i
+                            JOIN image_categoria ic
+                                ON i.id_image = ic.image_id
+                            JOIN categorias c
+                                ON ic.categoria_id = c.id_categoria
+                            Join (select t1.group_image
+                                    from (select distinct t.fecha_carga, t.group_image
+                                        from (select (select min(fecha)
+                                                        from images
+                                                        where general_group = i.general_group ) fecha_carga,
+                                                    group_image,
+                                                    model
+                                                from images i
+                                                group by general_group, group_image, model) t
+                                        where t.model = 'Original'
+                                        order by 1 desc) t1
+                                    {1}) lim
+                                ON i.group_image = lim.group_image
+                            {0}
+                        ) t
                     order by t.fecha_carga desc, t.general_group, t.group_image, t.name, t.categoria
-                    """.format(filtros)
+                    """.format(filtros, filtros_paginacion)
 
         # print(query)
         r = self.conexion.consulta_asociativa(query, query_data)
@@ -296,8 +321,20 @@ class GetImages(GetApi):
                 grupos[i["group_image"]] = []
             grupos[i["group_image"]].append(i)
         
+        cantidad = len(images)
+        pagina = pagina
+        por_pagina = por_pagina
+        if por_pagina:
+            paginas = (cantidad // por_pagina) + 1 if cantidad % por_pagina else cantidad // por_pagina
+        else:
+            paginas = pagina
+        
         self.response = {
             # "images": images,
+            "cantidad": cantidad,
+            "pagina": pagina,
+            "por_pagina": por_pagina,
+            "paginas": paginas,
             "grupos": grupos
         }
 
@@ -431,7 +468,7 @@ class CreateImageUpscale(PostApi):
                 general_group = base_name
                 
                 qd = (name, url, model, scale, base_name_custom, general_group)
-                
+
                 qrt = query.format(*qd)
                 
                 # pln(qrt)

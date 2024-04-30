@@ -258,7 +258,7 @@ class GetImages(GetApi):
                             {0}
                         ) t
                     order by t.fecha_carga desc, t.general_group, t.group_image, t.name, t.categoria
-                    """.format(filtros, filtros_paginacion)
+                    """.format(filtros)
         
         rc = self.conexion.consulta_asociativa(qc)
         cantidad = len(rc)

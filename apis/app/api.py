@@ -34,6 +34,10 @@ class UpdateInitData(PostApi, GetApi):
             {"name": "mm_ig_1", "cantidad": 10, "cats": ["Momo", "Twice"]},
             {"name": "mm_ig_2", "cantidad": 7, "cats": ["Momo", "Twice"]},
             {"name": "mm_igh_1", "cantidad": 2, "cats": ["Momo", "Twice"]},
+            {"name": "mn_tbtied", "cantidad": 6, "cats": ["Mina", "Twice"]},
+            {"name": "mn_tbtied", "cantidad": 6, "cats": ["Mina", "Twice"]},
+            {"name": "ch_ig_300424", "cantidad": 5, "cats": ["Chaeyoung", "Twice"]},
+            {"name": "sn_el", "cantidad": 3, "cats": ["Sana", "Twice"]},
             {"name": "tw_opf", "cantidad": 9, "cats_obj": {
                 1: ["Nayeon", "Twice"],
                 2: ["Jeongyeon", "Twice"],
@@ -402,6 +406,7 @@ class CreateImageUpscale(PostApi):
             # print(files)
             sd.move_to_ftp()
             
+            # now_db = "now() - interval 6 hour"
             query = """INSERT INTO images
                         (name, url, model, fecha, scale, group_image, general_group)
                         values

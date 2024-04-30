@@ -33,6 +33,7 @@ class UpdateInitData(PostApi, GetApi):
             {"name": "cy_ig_2", "cantidad": 1, "cats": ["Chaeyoung", "Twice"]},
             {"name": "mm_ig_1", "cantidad": 10, "cats": ["Momo", "Twice"]},
             {"name": "mm_ig_2", "cantidad": 7, "cats": ["Momo", "Twice"]},
+            {"name": "mm_igh_1", "cantidad": 2, "cats": ["Momo", "Twice"]},
             {"name": "tw_opf", "cantidad": 9, "cats_obj": {
                 1: ["Nayeon", "Twice"],
                 2: ["Jeongyeon", "Twice"],

@@ -2,9 +2,12 @@ import { useMemo } from 'react';
 import { useStates } from '../../Hooks/useStates';
 import styles from './styles/index.module.scss';
 
+import { ColorsCubesUpdate } from '../../Components/Loaders/ColorsCubesUpdate';
+
 const Update = props => {
     const { l, s, f  } = useStates();
     const userLogged = useMemo(() => s.login?.data?.user || {}, [s.login?.data?.user]);
+    const updating = useMemo(() => !!s.loaders?.update?.updateNew, [s.loaders?.update?.updateNew]);
 
     const submit = e  => {
         if (!!e) e.preventDefault();
@@ -21,6 +24,14 @@ const Update = props => {
                 <p className='text-3xl font-bold'>
                     Not logged
                 </p>
+            </div>
+        );
+    }
+
+    if (updating) {
+        return (
+            <div className='w-full flex justify-center'>
+                <ColorsCubesUpdate />
             </div>
         );
     }

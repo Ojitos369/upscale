@@ -401,6 +401,8 @@ class CreateImageUpscale(PostApi):
                 
                 qd = (name, url, model, scale, base_name_custom, general_group)
                 
+                pln(query, qd)
+                
                 if not self.conexion.ejecutar(query, qd):
                     self.conexion.rollback()
                     raise self.MYE("Error al guardar la imagen")

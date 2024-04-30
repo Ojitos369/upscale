@@ -142,6 +142,10 @@ const useF = props => {
             miAxios.post(end, form, { headers })
             .then(res => {
                 const { message } = res.data;
+                u1('update', 'form', {});
+                const file_input = document.getElementById('update_file');
+                file_input.value = '';
+
                 MySwal.fire({
                     title: 'Update',
                     text: message,
@@ -154,7 +158,6 @@ const useF = props => {
             })
             .finally(() => {
                 u2('loaders', 'update', 'updateNew', false);
-                
             });
         },
     }

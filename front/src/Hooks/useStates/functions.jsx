@@ -140,7 +140,7 @@ const useF = props => {
                 'Connection': 'keep-alive',
             };
             // timeout: 5 minutes
-            miAxios.post(end, form, { headers, timeout: 300000 })
+            miAxios.post(end, form, { headers, timeout: 600000 })
             .then(res => {
                 const { message } = res.data;
                 u1('update', 'form', {});

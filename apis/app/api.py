@@ -380,14 +380,14 @@ class CreateImageUpscale(PostApi):
             query = """INSERT INTO images
                         (name, url, model, fecha, scale, group_image, general_group)
                         values
-                        (%s, %s, %s, now(), %s, %s, %s)
+                        ('{0}', '{1}', '{2}', now(), '{3}', '{4}', '{5}')
                     """
             
             url_base = f"https://ojitos369.com/media/twice/ups/"
             
             qc = """SELECT id_categoria
                         FROM categorias
-                        WHERE upper(nombre) = %s """
+                        WHERE upper(nombre) = '{0}' """
 
             for file in files:
                 path = file["path"]
@@ -400,11 +400,12 @@ class CreateImageUpscale(PostApi):
                 group_image = name
                 general_group = base_name
                 
-                qd = (name, url, model, scale, base_name_custom, general_group, )
+                qd = (name, url, model, scale, base_name_custom, general_group)
                 
-                pln(query, qd)
+                qrt = query.format(*qd)
                 
-                if not self.conexion.ejecutar(query, qd):
+                pln(qrt)
+                if not self.conexion.ejecutar(qrt):
                     self.conexion.rollback()
                     raise self.MYE("Error al guardar la imagen")
                 self.conexion.commit()
@@ -414,7 +415,7 @@ class CreateImageUpscale(PostApi):
                         WHERE name = %s
                         and url = %s
                         """
-                qdt = (name, url, )
+                qdt = (name, url)
                 r = self.conexion.consulta_asociativa(qt, qdt)
                 image_id = r[0]["id_image"]
                 
@@ -426,8 +427,8 @@ class CreateImageUpscale(PostApi):
                 
                 for cat in temp_cats:
                     name = cat.upper()
-                    qcd = (name,)
-                    r = self.conexion.consulta_asociativa(qc, qcd)
+                    qrtc = qc.format(name)
+                    r = self.conexion.consulta_asociativa(qrtc)
                     
                     if not r:
                         bg = self.get_random_color()
@@ -436,22 +437,24 @@ class CreateImageUpscale(PostApi):
                         qt = """insert into categorias
                                 (nombre, bg, color)
                                 values
-                                (%s, %s, %s) """
-                        qd = (name, bg, color, )
-                        if not self.conexion.ejecutar(qt, qd):
+                                ('{0}', '{1}', '{2}') """
+                        qd = (name, bg, color)
+                        qrt = qt.format(*qd)
+                        if not self.conexion.ejecutar(qrt):
                             self.conexion.rollback()
                             raise self.MYE("Error al guardar la categoria")
                         self.conexion.commit()
-                        r = self.conexion.consulta_asociativa(qc, qcd)
+                        r = self.conexion.consulta_asociativa(qrtc)
                     id_categoria = r[0]["id_categoria"]
                     
                     
                     qt = """insert into image_categoria
                             (image_id, categoria_id)
                             values
-                            (%s, %s) """
-                    qd = (image_id, id_categoria, )
-                    if not self.conexion.ejecutar(qt, qd):
+                            ('{0}', '{1}') """
+                    qd = (image_id, id_categoria)
+                    qrt = qt.format(*qd)
+                    if not self.conexion.ejecutar(qrt):
                         self.conexion.rollback()
                         raise self.MYE("Error al guardar la categoria")
                     self.conexion.commit()

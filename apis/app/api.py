@@ -366,6 +366,7 @@ class CreateImageUpscale(PostApi):
 
         or_scale = scale
         # base, name, ext, scale
+        self.create_conexion()
         for cf in convert_files:
             sd = SDA()
             base_name_custom = cf["base"]

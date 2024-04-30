@@ -12,8 +12,8 @@ from app.settings import MEDIA_DIR, FTP_DATA
 class StableDiffApi:
     def __init__(self):
         # self.webui_server_url = "https://stablediff.aztlanlabs.net"
-        # self.webui_server_url = "https://lpfzrgtb-7860.usw3.devtunnels.ms"
-        self.webui_server_url = "localhost:7861"
+        self.webui_server_url = "https://lpfzrgtb-7860.usw3.devtunnels.ms"
+        # self.webui_server_url = "localhost:7861"
         self.imgs_path = f"{MEDIA_DIR}/img/img2img"
         self.images_procesadas = []
         

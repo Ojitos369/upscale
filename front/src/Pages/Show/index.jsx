@@ -32,7 +32,7 @@ const Show = props => {
             </h2>
             {images.map((image, index) => {
                 return (
-                    <div className='mt-8 mx-5 w-auto flex flex-col items-center'>
+                    <div className='mt-8 mx-5 w-auto flex flex-col items-center' key={index}>
                         <Phone key={index} image={image} />
                         <div className={`${styles.downloadLabel} text-start border rounded-lg px-4 py-2 mt-2`}>
                             <a href={image.url} target='_blank' rel='noreferrer' className='text-blue-500 underline'>

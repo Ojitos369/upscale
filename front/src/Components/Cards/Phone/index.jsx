@@ -1,9 +1,11 @@
-import { useEffect, useState } from "react";
+import { useMemo, useState } from "react";
 import { useStates } from "../../../Hooks/useStates";
 const Phone = props => {
     const { f } = useStates();
     const { image } = props;
-    const { url } = image;
+    // console.log(image);
+    const { url, name, id_image } = image;
+    const unique = `phone-${name}-${id_image}`;
     const [urlImage, setUrlImage] = useState(url);
 
     // useEffect(() => {
@@ -11,7 +13,8 @@ const Phone = props => {
     // }, [url]);
 
     return (
-        <div className="relative flex justify-center h-[300px] w-[160px] border border-4 border-black rounded-2xl"
+        <div className={`relative flex justify-center h-[300px] w-[160px] border border-4 border-black rounded-2xl ${unique}`}
+            id={unique}
             style={{
                 backgroundImage: `url(${urlImage})`,
                 backgroundSize: 'cover',

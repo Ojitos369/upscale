@@ -6,9 +6,9 @@ const Phone = props => {
     const { url } = image;
     const [urlImage, setUrlImage] = useState(url);
 
-    useEffect(() => {
-        f.app.validateUrl(url, setUrlImage);
-    }, [url]);
+    // useEffect(() => {
+    //     f.app.validateUrl(url, setUrlImage);
+    // }, [url]);
 
     return (
         <div className="relative flex justify-center h-[300px] w-[160px] border border-4 border-black rounded-2xl"

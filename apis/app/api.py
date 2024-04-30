@@ -465,3 +465,37 @@ class CreateImageUpscale(PostApi):
 
 
 
+""" 
+
+
+id_categoria	
+nombre	
+bg	
+color	
+icon	
+	
+TWICE, #fc5d9d, #000000, NULL
+NAYEON, #49c0ec, #000000, NULL
+JEONGYEON, #a3cc54, #000000, NULL
+MOMO, #e67ea3, #000000, NULL
+SANA, #8c79b4, #000000, NULL
+JIHYO, #f9cc85, #000000, NULL
+MINA, #71c7d4, #000000, NULL
+DAHYUN, #fefefe, #000000, NULL
+CHAEYOUNG, #e62722, #000000, NULL
+TZUYU, #2253a3, #ffffff, NUL
+
+insert into categorias (nombre, bg, color) values ('TWICE', '#fc5d9d', '#000000');
+insert into categorias (nombre, bg, color) values ('NAYEON', '#49c0ec', '#000000');
+insert into categorias (nombre, bg, color) values ('JEONGYEON', '#a3cc54', '#000000');
+insert into categorias (nombre, bg, color) values ('MOMO', '#e67ea3', '#000000');
+insert into categorias (nombre, bg, color) values ('SANA', '#8c79b4', '#000000');
+insert into categorias (nombre, bg, color) values ('JIHYO', '#f9cc85', '#000000');
+insert into categorias (nombre, bg, color) values ('MINA', '#71c7d4', '#000000');
+insert into categorias (nombre, bg, color) values ('DAHYUN', '#fefefe', '#000000');
+insert into categorias (nombre, bg, color) values ('CHAEYOUNG', '#e62722', '#000000');
+insert into categorias (nombre, bg, color) values ('TZUYU', '#2253a3', '#ffffff');
+
+
+
+"""

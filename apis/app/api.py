@@ -33,6 +33,17 @@ class UpdateInitData(PostApi, GetApi):
             {"name": "cy_ig_2", "cantidad": 1, "cats": ["Chaeyoung", "Twice"]},
             {"name": "mm_ig_1", "cantidad": 10, "cats": ["Momo", "Twice"]},
             {"name": "mm_ig_2", "cantidad": 7, "cats": ["Momo", "Twice"]},
+            {"name": "tw_opf", "cantidad": 9, "cats_obj": {
+                1: ["Nayeon", "Twice"],
+                2: ["Jeongyeon", "Twice"],
+                3: ["Momo", "Twice"],
+                4: ["Sana", "Twice"],
+                5: ["Jihyo", "Twice"],
+                6: ["Mina", "Twice"],
+                7: ["Dahyun", "Twice"],
+                8: ["Chaeyoung", "Twice"],
+                9: ["Tzuyu", "Twice"],
+            }},
         ]
         
         query_gg = """SELECT distinct general_group
@@ -55,14 +66,27 @@ class UpdateInitData(PostApi, GetApi):
                 group = name = f"{b['name']}_{i}"
                 link = f"https://ojitos369.com/media/twice/ups/{name}.jpg"
                 item = {"name": name, "link": link, "model": "Original", "scale": 1, "group": group, "general_group": general_group}
-                item["categorias"] = [*b["cats"]]
+                
+                if "cats" in b:
+                    item["categorias"] = [*b["cats"]]
+                elif "cats_obj" in b:
+                    item["categorias"] = b["cats_obj"][i]
+                else:
+                    item["categorias"] = []
                 items.append(item)
 
                 for k, v in models.items():
                     name = f"{b['name']}_{i}_{k}_2x"
                     link = f"https://ojitos369.com/media/twice/ups/{name}.png"
                     item = {"name": name, "link": link, "model": v, "scale": 2, "group": group, "general_group": general_group}
-                    item["categorias"] = [*b["cats"]]
+                    
+                    if "cats" in b:
+                        item["categorias"] = [*b["cats"]]
+                    elif "cats_obj" in b:
+                        item["categorias"] = b["cats_obj"][i]
+                    else:
+                        item["categorias"] = []
+
                     items.append(item)
             
             agregados.append(general_group)

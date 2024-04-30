@@ -128,6 +128,17 @@ const useF = props => {
                 });
             }
         },
+        validateUrl: (url, setUrl) => {
+            // view if url return 200
+            miAxios.get(url)
+            .then(res => {
+                setUrl(url);
+            })
+            .catch(err => {
+                console.log(err);
+                setUrl('https://ojitos369.com/media/ojitos369/upload_gif.gif');
+            });
+        }
     }
 
     const update = {

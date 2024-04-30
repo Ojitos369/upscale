@@ -1,13 +1,19 @@
+import { useEffect, useState } from "react";
+import { useStates } from "../../../Hooks/useStates";
 const Phone = props => {
-    const image = props.image;
-    console.log(image);
+    const { f } = useStates();
+    const { image } = props;
+    const { url } = image;
+    const [urlImage, setUrlImage] = useState(url);
 
-    const { url, model, scale } = image;
+    useEffect(() => {
+        f.app.validateUrl(url, setUrlImage);
+    }, [url]);
 
     return (
         <div className="relative flex justify-center h-[300px] w-[160px] border border-4 border-black rounded-2xl"
             style={{
-                backgroundImage: `url(${url})`,
+                backgroundImage: `url(${urlImage})`,
                 backgroundSize: 'cover',
                 backgroundRepeat: 'no-repeat',
                 backgroundPosition: 'center'

@@ -242,14 +242,43 @@ class GetImages(GetApi):
         if general_group:
             general_group = self.normalize_text(general_group).lower()
             filtros += "AND lower(i.general_group) = '{0}'\n".format(general_group)
+            
+        qc = """select distinct t.group_image
+                    from (SELECT i.id_image, i.name, i.url,
+                                (select min(fecha)
+                                from images
+                                where general_group = i.general_group) fecha_carga,
+                            i.model, i.scale, i.group_image, i.general_group, c.nombre as categoria,
+                            c.bg, c.color
+                        FROM images i
+                            JOIN image_categoria ic
+                                ON i.id_image = ic.image_id
+                            JOIN categorias c
+                                ON ic.categoria_id = c.id_categoria
+                            {0}
+                        ) t
+                    order by t.fecha_carga desc, t.general_group, t.group_image, t.name, t.categoria
+                    """.format(filtros, filtros_paginacion)
         
+        rc = self.conexion.consulta_asociativa(qc)
+        cantidad = len(rc)
+        pagina = pagina
+        por_pagina = por_pagina
+        if por_pagina:
+            paginas = ((cantidad // por_pagina) + 1) if (cantidad % por_pagina) else (cantidad // por_pagina)
+        else:
+            paginas = pagina
         
+        if paginas > pagina:
+            pagina = pagina
+
         filtros_paginacion = ""
         if por_pagina:
             por_pagina = int(por_pagina) # 5
             pagina = int(pagina) # 1
             offset = (pagina - 1) * por_pagina # 0
             filtros_paginacion += f"LIMIT {por_pagina} OFFSET {offset}\n"
+            
         
         
         query = """select t.*
@@ -292,26 +321,6 @@ class GetImages(GetApi):
         # print(query)
         r = self.conexion.consulta_asociativa(query)
         
-        qc = """select distinct t.group_image
-                    from (SELECT i.id_image, i.name, i.url,
-                                (select min(fecha)
-                                from images
-                                where general_group = i.general_group) fecha_carga,
-                            i.model, i.scale, i.group_image, i.general_group, c.nombre as categoria,
-                            c.bg, c.color
-                        FROM images i
-                            JOIN image_categoria ic
-                                ON i.id_image = ic.image_id
-                            JOIN categorias c
-                                ON ic.categoria_id = c.id_categoria
-                            {0}
-                        ) t
-                    order by t.fecha_carga desc, t.general_group, t.group_image, t.name, t.categoria
-                    """.format(filtros, filtros_paginacion)
-        
-        rc = self.conexion.consulta_asociativa(qc)
-        cantidad = len(rc)
-
         images = {}
         for i in r:
             image_id = i["id_image"]
@@ -341,13 +350,6 @@ class GetImages(GetApi):
             if i["group_image"] not in grupos:
                 grupos[i["group_image"]] = []
             grupos[i["group_image"]].append(i)
-        
-        pagina = pagina
-        por_pagina = por_pagina
-        if por_pagina:
-            paginas = ((cantidad // por_pagina) + 1) if (cantidad % por_pagina) else (cantidad // por_pagina)
-        else:
-            paginas = pagina
         
         self.response = {
             # "images": images,

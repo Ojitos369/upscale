@@ -289,8 +289,8 @@ class GetImages(GetApi):
                     order by t.fecha_carga desc, t.general_group, t.group_image, t.name, t.categoria
                     """.format(filtros, filtros_paginacion)
 
-        print(query)
-        # r = self.conexion.consulta_asociativa(query)
+        # print(query)
+        r = self.conexion.consulta_asociativa(query)
         
         qc = """select distinct t.group_image
                     from (SELECT i.id_image, i.name, i.url,

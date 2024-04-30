@@ -31,7 +31,7 @@ class BaseApi(APIView):
             self.conexion.close()
         except:
             pass
-        self.conexion = ConexionMySQL(DB_DATA, ce=self.ce)
+        self.conexion = ConexionMySQL(DB_DATA, ce=self.ce, send_error=True)
 
     def errors(self, e):
         try:

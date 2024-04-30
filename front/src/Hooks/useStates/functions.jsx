@@ -139,7 +139,8 @@ const useF = props => {
             const headers = {
                 'Connection': 'keep-alive',
             };
-            miAxios.post(end, form, { headers })
+            // timeout: 5 minutes
+            miAxios.post(end, form, { headers, timeout: 300000 })
             .then(res => {
                 const { message } = res.data;
                 u1('update', 'form', {});
@@ -155,6 +156,13 @@ const useF = props => {
             })
             .catch(err => {
                 console.log(err);
+                const { message } = err.response.data;
+                MySwal.fire({
+                    title: 'Update',
+                    text: message,
+                    icon: 'error',
+                    confirmButtonText: 'Ok'
+                });
             })
             .finally(() => {
                 u2('loaders', 'update', 'updateNew', false);

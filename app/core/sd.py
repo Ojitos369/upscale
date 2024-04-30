@@ -38,7 +38,7 @@ class StableDiffApi:
             },
             data=data,
         )
-        response = urllib.request.urlopen(request)
+        response = urllib.request.urlopen(request, timeout=600)
         return json.loads(response.read().decode('utf-8'))
 
     def call_txt2img_api(self, **payload):

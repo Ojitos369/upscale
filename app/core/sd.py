@@ -10,12 +10,17 @@ from app.settings import MEDIA_DIR, FTP_DATA
 
 
 class StableDiffApi:
-    def __init__(self):
+    def __init__(self, **kwargs):
         # self.webui_server_url = "https://stablediff.aztlanlabs.net"
         self.webui_server_url = "https://lpfzrgtb-7860.usw3.devtunnels.ms"
         # self.webui_server_url = "localhost:7861"
         self.imgs_path = f"{MEDIA_DIR}/img/img2img"
         self.images_procesadas = []
+        
+        if "ce" in kwargs:
+            self.ce = kwargs["ce"]
+        else:
+            self.ce = None
         
     def timestamp(self):
         return datetime.fromtimestamp(time.time()).strftime("%Y%m%d-%H%M%S")
@@ -49,13 +54,18 @@ class StableDiffApi:
             self.decode_and_save_base64(image, save_path)
 
     def call_img2img_api(self, name = None, **payload):
-        response = self.call_api('sdapi/v1/img2img', **payload)
-        for index, image in enumerate(response.get('images')):
-            name = name or f'img2img-{self.timestamp()}-{index}.png'
-            path_save = f"{MEDIA_DIR}/img/img2img"
-            save_path = os.path.join(path_save, name)
-            self.decode_and_save_base64(image, save_path)
-            return save_path
+        try:
+            response = self.call_api('sdapi/v1/img2img', **payload)
+            for index, image in enumerate(response.get('images')):
+                name = name or f'img2img-{self.timestamp()}-{index}.png'
+                path_save = f"{MEDIA_DIR}/img/img2img"
+                save_path = os.path.join(path_save, name)
+                self.decode_and_save_base64(image, save_path)
+                return save_path
+        except Exception as e:
+            if self.ce:
+                self.ce.show_error(e, send_email=True, extra=f"{payload}")
+            return None
 
     def change_model(self):
         payload = {
@@ -100,12 +110,16 @@ class StableDiffApi:
             from ojitos369.utils import print_json as pj
             # pj(payload)
             save_path = self.call_img2img_api(name=n ,**payload)
-            self.images_procesadas.append({
-                "path": save_path,
-                "model": model,
-                "scale": f"{scale}x"
-            })
-            print("Done")
+            if save_path:
+                self.images_procesadas.append({
+                    "path": save_path,
+                    "model": model,
+                    "scale": f"{scale}x"
+                })
+                print("Done")
+            else:
+                print("Error")
+                
 
         self.images_procesadas.append({
             "path": image_base, 

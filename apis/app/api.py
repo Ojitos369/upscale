@@ -228,7 +228,7 @@ class GetImages(GetApi):
             categorias = self.normalize_text(categorias).lower()
             categorias = categorias.replace(", ", ",").split(",")
             cat_join = "', '".join(categorias)
-            filtros += f"""AND i.general_group in (select distinct general_group
+            filtros += f"""AND i.group_image in (select distinct group_image
                         FROM images i
                         JOIN image_categoria ic
                         ON i.id_image = ic.image_id
@@ -392,7 +392,7 @@ class CreateImageUpscale(PostApi):
         # base, name, ext, scale
         self.create_conexion()
         for cf in convert_files:
-            sd = SDA()
+            sd = SDA(ce=self.ce)
             base_name_custom = cf["base"]
             ext = cf["ext"]
             sd.run(base=base_name_custom, name=base_name_custom, ext=ext, scale=or_scale, cats=cats)
@@ -519,6 +519,17 @@ insert into categorias (nombre, bg, color) values ('MINA', '#71c7d4', '#000000')
 insert into categorias (nombre, bg, color) values ('DAHYUN', '#fefefe', '#000000');
 insert into categorias (nombre, bg, color) values ('CHAEYOUNG', '#e62722', '#000000');
 insert into categorias (nombre, bg, color) values ('TZUYU', '#2253a3', '#ffffff');
+
+update categorias set bg = '#fc5d9d', color = '#000000' where nombre = 'TWICE';
+update categorias set bg = '#49c0ec', color = '#000000' where nombre = 'NAYEON';
+update categorias set bg = '#a3cc54', color = '#000000' where nombre = 'JEONGYEON';
+update categorias set bg = '#e67ea3', color = '#000000' where nombre = 'MOMO';
+update categorias set bg = '#8c79b4', color = '#000000' where nombre = 'SANA';
+update categorias set bg = '#f9cc85', color = '#000000' where nombre = 'JIHYO';
+update categorias set bg = '#71c7d4', color = '#000000' where nombre = 'MINA';
+update categorias set bg = '#fefefe', color = '#000000' where nombre = 'DAHYUN';
+update categorias set bg = '#e62722', color = '#000000' where nombre = 'CHAEYOUNG';
+update categorias set bg = '#2253a3', color = '#ffffff' where nombre = 'TZUYU';
 
 
 tw_opf

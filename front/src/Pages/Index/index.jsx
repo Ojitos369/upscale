@@ -9,7 +9,7 @@ const Index = props => {
 
     const grupos = useMemo(() => s.app?.data?.grupos || [], [s.app?.data?.grupos]);
     const originales = useMemo(() => s.app?.data?.originales || [], [s.app?.data?.grupos]);
-    console.log(originales);
+    // console.log(originales);
 
     useEffect(() => {
         f.app.getCategorias();

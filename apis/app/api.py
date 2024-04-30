@@ -37,7 +37,7 @@ class UpdateInitData(PostApi, GetApi):
             {"name": "mn_tbtied", "cantidad": 6, "cats": ["Mina", "Twice"]},
             {"name": "ch_ig_300424_1", "cantidad": 5, "cats": ["Chaeyoung", "Twice"]},
             {"name": "sn_el", "cantidad": 3, "cats": ["Sana", "Twice"]},
-            {"name": "tw_dv", "cantidad": 1, "cats": ["Twice", "Nayeon", "Jeongyeon", "Momo", "Sana", "Jihyo", "Mina", "Dahyun", "Chaeyoung", "Tzuyu", "Dive"]},
+            {"name": "tw_dv_1", "cantidad": 1, "cats": ["Twice", "Nayeon", "Jeongyeon", "Momo", "Sana", "Jihyo", "Mina", "Dahyun", "Chaeyoung", "Tzuyu", "Dive"]},
             {"name": "tw_opf", "cantidad": 9, "cats_obj": {
                 1: ["Nayeon", "Twice"],
                 2: ["Jeongyeon", "Twice"],

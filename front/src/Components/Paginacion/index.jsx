@@ -8,7 +8,7 @@ const Paginacion = props => {
     if (no_paginas > 1) {
         return (
             <div 
-                className={`flex justify-center w-full mt-5 ${styles.paginacion_row}`}>
+                className={`flex justify-start w-full mt-5 ${styles.paginacion_row}`}>
                 <div className={`flex justify-start w-10/12 ${styles.paginacion}`}>
                     {pagina > 1 && 
                     <button 

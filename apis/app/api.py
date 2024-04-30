@@ -198,7 +198,7 @@ class GetImages(GetApi):
         categorias = get_d(self.data, "cats", default=None)
 
         pagina = get_d(self.data, "pagina", default=1)
-        por_pagina = get_d(self.data, "por_pagina", default=None)
+        por_pagina = get_d(self.data, "por_pagina", default=25)
 
         filtros = "WHERE 1=1\n"
         query_data = []

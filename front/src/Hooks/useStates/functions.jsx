@@ -82,6 +82,10 @@ const useF = props => {
             });
         },
         getImages: () => {
+            if (!!s.loaders?.app?.getImages) return;
+
+            u2('loaders', 'app', 'getImages', true);
+
             const filtros = s.app?.filtros || {};
 
             console.log("filtros", filtros);
@@ -129,6 +133,8 @@ const useF = props => {
             })
             .catch(err => {
                 console.log(err);
+            }).finally(() => {
+                u2('loaders', 'app', 'getImages', false);
             });
         },
         getGroupImages: grupo => {

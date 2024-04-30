@@ -4,11 +4,14 @@ import { useEffect } from 'react';
 
 import { InfoCard } from '../../Components/Cards/InfoCard';
 
+import { DobleLoader } from '../../Components/Loaders/DobleLoader';
+
 const Index = props => {
     const { ls, lf, s, f, Link } = useStates();
 
     const grupos = useMemo(() => s.app?.data?.grupos || [], [s.app?.data?.grupos]);
     const originales = useMemo(() => s.app?.data?.originales || [], [s.app?.data?.grupos]);
+    const gettingImages = useMemo(() => !!s.loaders?.app?.getImages, [s.loaders?.app?.getImages]);
     // console.log(originales);
 
     useEffect(() => {
@@ -18,6 +21,14 @@ const Index = props => {
     useEffect(() => {
         f.app.getImages();
     }, [s.app?.filtros]);
+
+    if (!gettingImages) {
+        return (
+            <div className='w-full flex justify-center mt-16'>
+                <DobleLoader />
+            </div>
+        );
+    }
 
     return (
         <div className='flex flex-wrap justify-center mb-5'>

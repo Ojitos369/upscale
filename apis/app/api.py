@@ -244,7 +244,7 @@ class GetImages(GetApi):
             filtros += "AND lower(i.general_group) = '{0}'\n".format(general_group)
         
         
-        filtros_paginacion = "WHERE 1=1\n"
+        filtros_paginacion = ""
         if por_pagina:
             por_pagina = int(por_pagina) # 5
             pagina = int(pagina) # 1
@@ -280,7 +280,9 @@ class GetImages(GetApi):
                                         ON ic.categoria_id = c.id_categoria
                                         {0}) pt
                                         order by pt.fecha_carga desc, pt.general_group, pt.group_image, pt.name, pt.categoria) t1
-                                    {1}) lim
+                                        order by t1.fecha_carga desc, t1.general_group, t1.group_image, t1.name, t1.categoria
+                                        {1}
+                                        ) lim
                                 ON i.group_image = lim.group_image
                             {0}
                         ) t
@@ -288,7 +290,7 @@ class GetImages(GetApi):
                     """.format(filtros, filtros_paginacion)
 
         print(query)
-        r = self.conexion.consulta_asociativa(query)
+        # r = self.conexion.consulta_asociativa(query)
         
         qc = """select distinct t.group_image
                     from (SELECT i.id_image, i.name, i.url,
@@ -343,7 +345,7 @@ class GetImages(GetApi):
         pagina = pagina
         por_pagina = por_pagina
         if por_pagina:
-            paginas = cantidad // por_pagina
+            paginas = ((cantidad // por_pagina) + 1) if (cantidad % por_pagina) else (cantidad // por_pagina)
         else:
             paginas = pagina
         

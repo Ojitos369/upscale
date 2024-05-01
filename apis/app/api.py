@@ -27,6 +27,7 @@ class UpdateInitData(PostApi, GetApi):
         }
         
         bases = [
+            {"name": "dy_ex", "cantidad": 1, "cats": ["Dahyun", "Twice"]},
             {"name": "cy_1", "cantidad": 1, "cats": ["Chaeyoung", "Twice"]},
             {"name": "mn_fd", "cantidad": 11, "cats": ["Mina", "Twice"]},
             {"name": "sn_bb", "cantidad": 40, "cats": ["Sana", "Twice"]},

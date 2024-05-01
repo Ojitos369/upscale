@@ -270,7 +270,7 @@ class GetImages(GetApi):
         else:
             paginas = pagina
         
-        if paginas > pagina:
+        if pagina > paginas:
             pagina = pagina
 
         filtros_paginacion = ""

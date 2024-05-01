@@ -27,18 +27,13 @@ class UpdateInitData(PostApi, GetApi):
         }
         
         bases = [
-            {"name": "dy_ex", "cantidad": 1, "cats": ["Dahyun", "Twice"]},
-            {"name": "cy_1", "cantidad": 1, "cats": ["Chaeyoung", "Twice"]},
-            {"name": "mn_fd", "cantidad": 11, "cats": ["Mina", "Twice"]},
             {"name": "sn_bb", "cantidad": 40, "cats": ["Sana", "Twice"]},
-            {"name": "cy_ig_2", "cantidad": 1, "cats": ["Chaeyoung", "Twice"]},
+            {"name": "mn_fd", "cantidad": 11, "cats": ["Mina", "Twice"]},
             {"name": "mm_ig_1", "cantidad": 10, "cats": ["Momo", "Twice"]},
             {"name": "mm_ig_2", "cantidad": 7, "cats": ["Momo", "Twice"]},
             {"name": "mm_igh_1", "cantidad": 2, "cats": ["Momo", "Twice"]},
+            {"name": "cy_1", "cantidad": 1, "cats": ["Chaeyoung", "Twice"]},
             {"name": "mn_tbtied", "cantidad": 6, "cats": ["Mina", "Twice"]},
-            {"name": "ch_ig_300424_1", "cantidad": 5, "cats": ["Chaeyoung", "Twice"]},
-            {"name": "sn_el", "cantidad": 3, "cats": ["Sana", "Twice"]},
-            {"name": "tw_dv_1", "cantidad": 1, "cats": ["Twice", "Nayeon", "Jeongyeon", "Momo", "Sana", "Jihyo", "Mina", "Dahyun", "Chaeyoung", "Tzuyu", "Dive"]},
             {"name": "tw_opf", "cantidad": 9, "cats_obj": {
                 1: ["Nayeon", "Twice"],
                 2: ["Jeongyeon", "Twice"],
@@ -50,6 +45,14 @@ class UpdateInitData(PostApi, GetApi):
                 8: ["Chaeyoung", "Twice"],
                 9: ["Tzuyu", "Twice"],
             }},
+            {"name": "cy_ig_2", "cantidad": 1, "cats": ["Chaeyoung", "Twice"]},
+            {"name": "sn_el", "cantidad": 3, "cats": ["Sana", "Twice"]},
+            {"name": "ch_ig_300424_1", "cantidad": 5, "cats": ["Chaeyoung", "Twice"]},
+            {"name": "tw_dv_1", "cantidad": 1, "cats": ["Twice", "Nayeon", "Jeongyeon", "Momo", "Sana", "Jihyo", "Mina", "Dahyun", "Chaeyoung", "Tzuyu", "Dive"]},
+            {"name": "dy_ex", "cantidad": 1, "cats": ["Dahyun", "Twice"]},
+            {"name": "cy_ig_010524", "cantidad": 1, "cats": ["Chaeyoung", "Twice"]},
+            {"name": "cy_bl_1", "cantidad": 4, "cats": ["Chaeyoung", "Twice", "Bubble"]},
+            
         ]
         
         query_gg = """SELECT distinct general_group
@@ -596,6 +599,7 @@ update categorias set bg = '#fefefe', color = '#000000' where nombre = 'DAHYUN';
 update categorias set bg = '#e62722', color = '#000000' where nombre = 'CHAEYOUNG';
 update categorias set bg = '#2253a3', color = '#ffffff' where nombre = 'TZUYU';
 
+SET GLOBAL time_zone = 'America/Mexico_City';
 
 tw_opf
 """

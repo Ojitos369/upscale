@@ -13,9 +13,16 @@ const Index = props => {
     const originales = useMemo(() => s.app?.data?.originales || [], [s.app?.data?.grupos]);
     const gettingImages = useMemo(() => !!s.loaders?.app?.getImages, [s.loaders?.app?.getImages]);
 
-    const pagina = useMemo(() => s.app?.paginador?.pagina || 1, [s.app?.paginador?.pagina]);
-    const por_pagina = useMemo(() => s.app?.paginador?.por_pagina || 20, [s.app?.paginador?.por_pagina]);
     const paginas = useMemo(() => s.app?.paginador?.paginas || 1, [s.app?.paginador?.paginas]);
+    const pagina = useMemo(() => {
+        let p = s.app?.paginador?.pagina || 1
+        if (p > paginas) {
+            return paginas;
+        } else {
+            return p;
+        }
+    }, [s.app?.paginador?.pagina]);
+    const por_pagina = useMemo(() => s.app?.paginador?.por_pagina || 20, [s.app?.paginador?.por_pagina]);
 
     const updatePage = page => {
         f.u2('app', 'paginador', 'pagina', page);

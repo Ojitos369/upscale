@@ -263,7 +263,8 @@ class GetImages(GetApi):
         rc = self.conexion.consulta_asociativa(qc)
         cantidad = len(rc)
         pagina = pagina
-        por_pagina = por_pagina
+        por_pagina = int(por_pagina)
+        pagina = int(pagina)
         if por_pagina:
             paginas = ((cantidad // por_pagina) + 1) if (cantidad % por_pagina) else (cantidad // por_pagina)
         else:
@@ -274,8 +275,6 @@ class GetImages(GetApi):
 
         filtros_paginacion = ""
         if por_pagina:
-            por_pagina = int(por_pagina) # 5
-            pagina = int(pagina) # 1
             offset = (pagina - 1) * por_pagina # 0
             filtros_paginacion += f"LIMIT {por_pagina} OFFSET {offset}\n"
             

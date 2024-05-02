@@ -27,7 +27,7 @@ class UpdateInitData(PostApi, GetApi):
         }
         
         base_q = get_d(self.data, "bs", default=None)
-        model_q = get_d(self.data, "model", default=None)
+        model_q = get_d(self.data, "mdl", default=None)
         
 
         bases = [
@@ -56,7 +56,7 @@ class UpdateInitData(PostApi, GetApi):
             {"name": "dy_ex", "cantidad": 1, "cats": ["Dahyun", "Twice"]},
             {"name": "cy_ig_010524", "cantidad": 1, "cats": ["Chaeyoung", "Twice"]},
             {"name": "cy_bl_1", "cantidad": 4, "cats": ["Chaeyoung", "Twice", "Bubble"]},
-            {"name": "mn_ex_1", "cantidad": 2, "cats": ["Mina", "Twice"]},
+            # {"name": "mn_ex_1", "cantidad": 2, "cats": ["Mina", "Twice"]},
             {"name": "sn_ttt_1", "cantidad": 3, "cats": ["Sana", "Twice", "Talk that Talk", "Between 1&2"]},
             {"name": "tw_pc_1", "cantidad": 9, "cats_obj": {
                 1: ["Nayeon", "Twice", "Photo Card"],
@@ -130,6 +130,168 @@ class UpdateInitData(PostApi, GetApi):
                     (%s, %s, %s, now(), %s, %s, %s)
                 """
 
+        for i in items:
+            name = i["name"]
+            model = i["model"]
+            scale = str(i["scale"])
+            if not scale.endswith("x"):
+                scale += "x"
+
+            group = get_d(i, "group", default=None)
+            if group: group = group.lower()
+            general_group = get_d(i, "general_group", default=None)
+            if general_group: general_group = general_group.lower()
+
+            data = [name, i["link"], model, scale, group, general_group]
+            
+            if not self.conexion.ejecutar(query, data):
+                self.conexion.rollback()
+                raise self.MYE("Error al guardar la imagen")
+            
+            self.conexion.commit()
+            
+            qt = """SELECT id_image
+                    FROM images
+                    WHERE name = %s
+                    and url = %s
+                    """
+            qd = (i["name"], i["link"])
+            r = self.conexion.consulta_asociativa(qt, qd)
+            image_id = r[0]["id_image"]
+            
+            categorias = get_d(i, "categorias", [])
+            
+            if model not in categorias:
+                categorias.append(model)
+            if scale not in categorias:
+                categorias.append(scale)
+            
+            qc = """SELECT id_categoria
+                    FROM categorias
+                    WHERE upper(nombre) = %s """
+            
+            for cat in categorias:
+                name = cat.upper()
+                qcd = (name,)
+                r = self.conexion.consulta_asociativa(qc, qcd)
+                
+                if not r:
+                    bg = self.get_random_color()
+                    color = self.get_text_color(bg)
+                    
+                    qt = """insert into categorias
+                            (nombre, bg, color)
+                            values
+                            (%s, %s, %s) """
+                    qd = (name, bg, color)
+                    if not self.conexion.ejecutar(qt, qd):
+                        self.conexion.rollback()
+                        raise self.MYE("Error al guardar la categoria")
+                    self.conexion.commit()
+                    r = self.conexion.consulta_asociativa(qc, qcd)
+                id_categoria = r[0]["id_categoria"]
+                
+                
+                qt = """insert into image_categoria
+                        (image_id, categoria_id)
+                        values
+                        (%s, %s) """
+                qd = (image_id, id_categoria)
+                if not self.conexion.ejecutar(qt, qd):
+                    self.conexion.rollback()
+                    raise self.MYE("Error al guardar la categoria")
+                self.conexion.commit()
+
+        self.conexion.commit()
+        
+        self.response = {
+            "message": "Datos guardados correctamente",
+            "agregados": agregados,
+            "repetidos": repetidos,
+            "cantidad": len(items)
+        }
+
+
+class UpdateCustomData(PostApi, GetApi):
+    def main(self):
+        self.show_me()
+        
+        self.create_conexion()
+
+        items = []
+
+        models = {
+            "fr": "4x_foolhardy_Remacri",
+            "pp": "4xPurePhoto-span",
+            "snp": "ScuNet PSNR",
+            "d4": "DAT x4",
+        }
+
+        # ?bs=sn_ttt_1&ctd=3&cats=Sana,Twice,Talk that Talk,Between 1&2
+        general_group = base = get_d(self.data, "bs")
+        models_q = get_d(self.data, "mdl", default=None)
+        cantidad = int(get_d(self.data, "ctd", default=1))
+        cats = get_d(self.data, "cats", default=[])
+
+        if cats and type(cats) == str:
+            cats = cats.replace(", ", ",").replace("{and}", "&").split(",")
+        if models_q and type(models_q) == str:
+            models_q = models_q.replace(", ", ",").replace("{and}", "&").split(",")
+        
+        if not models_q:
+            models_q = models.keys()
+
+        query_gg = """SELECT distinct name, model
+                    FROM images
+                    where general_group = '{0}'
+                    """.format(base.lower())
+
+        r = self.conexion.consulta_asociativa(query_gg)
+        rs = [i["name"]+["model"] for i in r]
+
+        agregados = []
+        repetidos = []
+        
+        for i in range(1, cantidad + 1):
+            group = name = f"{base}_{i}"
+            
+            link = f"https://ojitos369.com/media/twice/ups/{name}.jpg"
+            item = {"name": name, "link": link, "model": "Original", "scale": 1, "group": group, "general_group": general_group}
+            item["categorias"] = cats
+
+            if f"{name}Original" not in rs:
+                items.append(item)
+                agregados.append(name)
+
+            for m in models_q:
+                try:
+                    v = models[m]
+                except:
+                    continue
+
+                name = f"{base}_{i}_{m}_2x"
+                if f"{name}{v}" in rs:
+                    repetidos.append(name)
+                    continue
+            
+                link = f"https://ojitos369.com/media/twice/ups/{name}.png"
+                item = {"name": name, "link": link, "model": v, "scale": 2, "group": group, "general_group": general_group}
+                item["categorias"] = cats
+
+                items.append(item)
+                agregados.append(name)
+        
+
+        query = """INSERT INTO images 
+                    (name, url, model, fecha, scale, group_image, general_group)
+                    values
+                    (%s, %s, %s, now(), %s, %s, %s)
+                """
+        # self.response = {
+        #     "items": items
+        # }
+
+        # return 
         for i in items:
             name = i["name"]
             model = i["model"]

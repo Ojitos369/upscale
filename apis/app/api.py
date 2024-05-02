@@ -26,6 +26,10 @@ class UpdateInitData(PostApi, GetApi):
             "d4": "DAT x4",
         }
         
+        base_q = get_d(self.data, "bs", default=None)
+        model_q = get_d(self.data, "model", default=None)
+        
+
         bases = [
             {"name": "sn_bb", "cantidad": 40, "cats": ["Sana", "Twice"]},
             {"name": "mn_fd", "cantidad": 11, "cats": ["Mina", "Twice"]},
@@ -52,6 +56,19 @@ class UpdateInitData(PostApi, GetApi):
             {"name": "dy_ex", "cantidad": 1, "cats": ["Dahyun", "Twice"]},
             {"name": "cy_ig_010524", "cantidad": 1, "cats": ["Chaeyoung", "Twice"]},
             {"name": "cy_bl_1", "cantidad": 4, "cats": ["Chaeyoung", "Twice", "Bubble"]},
+            {"name": "mn_ex_1", "cantidad": 2, "cats": ["Mina", "Twice"]},
+            {"name": "sn_ttt_1", "cantidad": 3, "cats": ["Sana", "Twice", "Talk that Talk", "Between 1&2"]},
+            {"name": "tw_pc_1", "cantidad": 9, "cats_obj": {
+                1: ["Nayeon", "Twice", "Photo Card"],
+                2: ["Jeongyeon", "Twice", "Photo Card"],
+                3: ["Momo", "Twice", "Photo Card"],
+                4: ["Sana", "Twice", "Photo Card"],
+                5: ["Jihyo", "Twice", "Photo Card"],
+                6: ["Mina", "Twice", "Photo Card"],
+                7: ["Dahyun", "Twice", "Photo Card"],
+                8: ["Chaeyoung", "Twice", "Photo Card"],
+                9: ["Tzuyu", "Twice", "Photo Card"],
+            }},
             
         ]
         
@@ -66,6 +83,9 @@ class UpdateInitData(PostApi, GetApi):
         
         for b in bases:
             general_group = b["name"]
+            if base_q and base_q != general_group:
+                continue
+
             if general_group in ggs:
                 print(f"Ya existe el grupo {general_group}")
                 repetidos.append(general_group)
@@ -85,6 +105,10 @@ class UpdateInitData(PostApi, GetApi):
                 items.append(item)
 
                 for k, v in models.items():
+                    
+                    if model_q and model_q != k:
+                        continue
+                    
                     name = f"{b['name']}_{i}_{k}_2x"
                     link = f"https://ojitos369.com/media/twice/ups/{name}.png"
                     item = {"name": name, "link": link, "model": v, "scale": 2, "group": group, "general_group": general_group}

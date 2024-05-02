@@ -56,7 +56,7 @@ class UpdateInitData(PostApi, GetApi):
             {"name": "dy_ex", "cantidad": 1, "cats": ["Dahyun", "Twice"]},
             {"name": "cy_ig_010524", "cantidad": 1, "cats": ["Chaeyoung", "Twice"]},
             {"name": "cy_bl_1", "cantidad": 4, "cats": ["Chaeyoung", "Twice", "Bubble"]},
-            # {"name": "mn_ex_1", "cantidad": 2, "cats": ["Mina", "Twice"]},
+            {"name": "mn_ex_1", "cantidad": 2, "cats": ["Mina", "Twice"]},
             {"name": "sn_ttt_1", "cantidad": 3, "cats": ["Sana", "Twice", "Talk that Talk", "Between 1&2"]},
             {"name": "tw_pc_1", "cantidad": 9, "cats_obj": {
                 1: ["Nayeon", "Twice", "Photo Card"],
@@ -227,10 +227,21 @@ class UpdateCustomData(PostApi, GetApi):
             "d4": "DAT x4",
         }
 
-        # ?bs=sn_ttt_1&ctd=3&cats=Sana,Twice,Talk that Talk,Between 1&2
+        # ?bs=tw_dvi_1&ctdi=1&ctdf=1&cats=Nayeon,Twice,Dive
+        # ?bs=tw_dvi_1&ctdi=2&ctdf=2&cats=Jeongyeon,Twice,Dive
+        # ?bs=tw_dvi_1&ctdi=3&ctdf=3&cats=Momo,Twice,Dive
+        # ?bs=tw_dvi_1&ctdi=4&ctdf=4&cats=Sana,Twice,Dive
+        # ?bs=tw_dvi_1&ctdi=5&ctdf=5&cats=Jihyo,Twice,Dive
+        # ?bs=tw_dvi_1&ctdi=6&ctdf=6&cats=Mina,Twice,Dive
+        # ?bs=tw_dvi_1&ctdi=7&ctdf=7&cats=Dahyun,Twice,Dive
+        # ?bs=tw_dvi_1&ctdi=8&ctdf=8&cats=Chaeyoung,Twice,Dive
+        # ?bs=tw_dvi_1&ctdi=9&ctdf=9&cats=Tzuyu,Twice,Dive
+
         general_group = base = get_d(self.data, "bs")
         models_q = get_d(self.data, "mdl", default=None)
         cantidad = int(get_d(self.data, "ctd", default=1))
+        cantidad_inicial = int(get_d(self.data, "ctdi", default=None))
+        cantidad_final = int(get_d(self.data, "ctdf", default=None))
         cats = get_d(self.data, "cats", default=[])
 
         if cats and type(cats) == str:
@@ -247,12 +258,18 @@ class UpdateCustomData(PostApi, GetApi):
                     """.format(base.lower())
 
         r = self.conexion.consulta_asociativa(query_gg)
-        rs = [i["name"]+["model"] for i in r]
+        rs = [i["name"]+i["model"] for i in r]
 
         agregados = []
         repetidos = []
-        
-        for i in range(1, cantidad + 1):
+        my_range = range(1, cantidad + 1)
+
+        if cantidad_inicial and cantidad_final:
+            my_range = range(cantidad_inicial, cantidad_final + 1)
+        elif cantidad_inicial and cantidad_inicial < cantidad:
+            my_range = range(cantidad_inicial, cantidad + 1)
+
+        for i in my_range:
             group = name = f"{base}_{i}"
             
             link = f"https://ojitos369.com/media/twice/ups/{name}.jpg"

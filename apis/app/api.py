@@ -20,10 +20,46 @@ class UpdateInitData(PostApi, GetApi):
         items = []
 
         models = {
+            "lan": "Lanczos",
+            "near": "Nearest",
+            "4crv1": "4x-ClearRealityV1",
+            "4crv1s": "4x-ClearRealityV1_Soft",
+            "4ry": "4x-Rybu",
+            "4us": "4x-UltraSharp",
             "fr": "4x_foolhardy_Remacri",
+            "4rrg": "4x_RealisticRescaler_100000_G",
+            "4vv1": "4x_Valar_v1",
+            "4fu": "4xFaceUPDAT",
+            "4n8hl": "4xNomos8kHAT-L_otf",
+            "4ffd": "4xFrankendata_FullDegradation_g_460000",
+            "4n8sc": "4xNomos8kSC",
+            "4ld": "4XLSDIRDAT",
+            "4lpn": "4xLSDIRplusN",
+            "4nurm": "4xNomosUni_rgt_multijpg",
+            "4nud": "4xNomosUniDAT otf",
+            "pp": "4xPurePhoto-span",
+            "d2": "DAT x2",
+            "d3": "DAT x3",
+            "d4": "DAT x4",
+            "dd2": "DAT_x2",
+            "dd3": "DAT_x3",
+            "dd4": "DAT_x4",
+            "df2k": "DF2K",
+            "e4": "ESRGAN 4x",
+            "lds": "LDSR",
+            "re4p": "R-ESRGAN 4x+",
+            "re4a": "R-ESRGAN 4x+ Anime6B",
+            "scu": "ScUNET",
+            "snp": "ScUNET PSNR",
+            "sw4": "SwinIR_4x",
+        }
+        
+        models = {
+            # "fr": "4x_foolhardy_Remacri",
             "pp": "4xPurePhoto-span",
             "snp": "ScuNet PSNR",
             "d4": "DAT x4",
+            "re4p": "R-ESRGAN 4x+",
         }
         
         base_q = get_d(self.data, "bs", default=None)
@@ -219,12 +255,48 @@ class UpdateCustomData(PostApi, GetApi):
         self.create_conexion()
 
         items = []
+        
+        models = {
+            "lan": "Lanczos",
+            "near": "Nearest",
+            "4crv1": "4x-ClearRealityV1",
+            "4crv1s": "4x-ClearRealityV1_Soft",
+            "4ry": "4x-Rybu",
+            "4us": "4x-UltraSharp",
+            "fr": "4x_foolhardy_Remacri",
+            "4rrg": "4x_RealisticRescaler_100000_G",
+            "4vv1": "4x_Valar_v1",
+            "4fu": "4xFaceUPDAT",
+            "4n8hl": "4xNomos8kHAT-L_otf",
+            "4ffd": "4xFrankendata_FullDegradation_g_460000",
+            "4n8sc": "4xNomos8kSC",
+            "4ld": "4XLSDIRDAT",
+            "4lpn": "4xLSDIRplusN",
+            "4nurm": "4xNomosUni_rgt_multijpg",
+            "4nud": "4xNomosUniDAT otf",
+            "pp": "4xPurePhoto-span",
+            "d2": "DAT x2",
+            "d3": "DAT x3",
+            "d4": "DAT x4",
+            "dd2": "DAT_x2",
+            "dd3": "DAT_x3",
+            "dd4": "DAT_x4",
+            "df2k": "DF2K",
+            "e4": "ESRGAN 4x",
+            "lds": "LDSR",
+            "re4p": "R-ESRGAN 4x+",
+            "re4a": "R-ESRGAN 4x+ Anime6B",
+            "scu": "ScUNET",
+            "snp": "ScUNET PSNR",
+            "sw4": "SwinIR_4x",
+        }
 
         models = {
-            "fr": "4x_foolhardy_Remacri",
+            # "fr": "4x_foolhardy_Remacri",
             "pp": "4xPurePhoto-span",
             "snp": "ScuNet PSNR",
             "d4": "DAT x4",
+            "re4p": "R-ESRGAN 4x+",
         }
 
         # ?bs=tw_dvi_1&ctdi=1&ctdf=1&cats=Nayeon,Twice,Dive

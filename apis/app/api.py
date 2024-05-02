@@ -236,12 +236,14 @@ class UpdateCustomData(PostApi, GetApi):
         # ?bs=tw_dvi_1&ctdi=7&ctdf=7&cats=Dahyun,Twice,Dive
         # ?bs=tw_dvi_1&ctdi=8&ctdf=8&cats=Chaeyoung,Twice,Dive
         # ?bs=tw_dvi_1&ctdi=9&ctdf=9&cats=Tzuyu,Twice,Dive
+        
+        # ?bs=jh_fd_1&ctd=7&cats=Jihyo,Twice,Fred
 
         general_group = base = get_d(self.data, "bs")
         models_q = get_d(self.data, "mdl", default=None)
         cantidad = int(get_d(self.data, "ctd", default=1))
-        cantidad_inicial = int(get_d(self.data, "ctdi", default=None))
-        cantidad_final = int(get_d(self.data, "ctdf", default=None))
+        cantidad_inicial = int(get_d(self.data, "ctdi", default=0))
+        cantidad_final = int(get_d(self.data, "ctdf", default=0))
         cats = get_d(self.data, "cats", default=[])
 
         if cats and type(cats) == str:

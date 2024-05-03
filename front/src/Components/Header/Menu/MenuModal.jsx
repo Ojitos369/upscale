@@ -11,6 +11,9 @@ const MenuModal = props => {
     const login = () => {
         f.u2('menu', 'modal', 'mode', 'login');
     }
+    const filtros = () => {
+        f.u2('menu', 'modal', 'mode', 'filtros');
+    }
     
     return (
         <div className={`${styles.menuModal} w-full flex flex-wrap justify-center`}>
@@ -43,7 +46,7 @@ const MenuModal = props => {
             <div className="w-10/12 md:w-5/12 px-4 py-3">
                 <div
                     className='w-full flex items-center justify-center py-2 px-4 rounded-md bg-cyan-500 hover:bg-cyan-600 text-black'
-
+                    onClick={filtros}
                     >
                     <p className="">Filtros</p>
                 </div>

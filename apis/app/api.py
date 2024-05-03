@@ -55,11 +55,15 @@ class UpdateInitData(PostApi, GetApi):
         }
         
         models = {
-            # "fr": "4x_foolhardy_Remacri",
-            "pp": "4xPurePhoto-span",
-            "snp": "ScuNet PSNR",
+            "scu": "ScUNET",
             "d4": "DAT x4",
-            "re4p": "R-ESRGAN 4x+",
+            "pp": "4xPurePhoto-span",
+            "4fu": "4xFaceUPDAT",
+            # "fr": "4x_foolhardy_Remacri",
+            # "pp": "4xPurePhoto-span",
+            # "snp": "ScuNet PSNR",
+            # "d4": "DAT x4",
+            # "re4p": "R-ESRGAN 4x+",
         }
         
         base_q = get_d(self.data, "bs", default=None)
@@ -147,7 +151,7 @@ class UpdateInitData(PostApi, GetApi):
                     
                     name = f"{b['name']}_{i}_{k}_2x"
                     link = f"https://ojitos369.com/media/twice/ups/{name}.png"
-                    item = {"name": name, "link": link, "model": v, "scale": 2, "group": group, "general_group": general_group}
+                    item = {"name": name, "link": link, "model": v, "scale": 4, "group": group, "general_group": general_group}
                     
                     if "cats" in b:
                         item["categorias"] = [*b["cats"]]
@@ -293,10 +297,14 @@ class UpdateCustomData(PostApi, GetApi):
 
         models = {
             # "fr": "4x_foolhardy_Remacri",
-            "pp": "4xPurePhoto-span",
-            "snp": "ScuNet PSNR",
+            # "pp": "4xPurePhoto-span",
+            # "snp": "ScuNet PSNR",
+            # "d4": "DAT x4",
+            # "re4p": "R-ESRGAN 4x+",
+            "scu": "ScUNET",
             "d4": "DAT x4",
-            "re4p": "R-ESRGAN 4x+",
+            "pp": "4xPurePhoto-span",
+            "4fu": "4xFaceUPDAT",
         }
 
         # ?bs=tw_dvi_1&ctdi=1&ctdf=1&cats=Nayeon,Twice,Dive
@@ -309,6 +317,7 @@ class UpdateCustomData(PostApi, GetApi):
         # ?bs=tw_dvi_1&ctdi=8&ctdf=8&cats=Chaeyoung,Twice,Dive
         # ?bs=tw_dvi_1&ctdi=9&ctdf=9&cats=Tzuyu,Twice,Dive
         
+        # ?bs=jh_fd_1&ctd=7&cats=Jihyo,Twice,Fred
         # ?bs=jh_fd_1&ctd=7&cats=Jihyo,Twice,Fred
 
         general_group = base = get_d(self.data, "bs")
@@ -366,7 +375,7 @@ class UpdateCustomData(PostApi, GetApi):
                     continue
             
                 link = f"https://ojitos369.com/media/twice/ups/{name}.png"
-                item = {"name": name, "link": link, "model": v, "scale": 2, "group": group, "general_group": general_group}
+                item = {"name": name, "link": link, "model": v, "scale": 4, "group": group, "general_group": general_group}
                 item["categorias"] = cats
 
                 items.append(item)

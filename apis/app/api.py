@@ -59,6 +59,7 @@ class UpdateInitData(PostApi, GetApi):
             "d4": "DAT x4",
             "pp": "4xPurePhoto-span",
             "4fu": "4xFaceUPDAT",
+            "4ld": "4XLSDIRDAT",
             # "fr": "4x_foolhardy_Remacri",
             # "pp": "4xPurePhoto-span",
             # "snp": "ScuNet PSNR",
@@ -305,6 +306,7 @@ class UpdateCustomData(PostApi, GetApi):
             "d4": "DAT x4",
             "pp": "4xPurePhoto-span",
             "4fu": "4xFaceUPDAT",
+            "4ld": "4XLSDIRDAT",
         }
 
         # ?bs=tw_dvi_1&ctdi=1&ctdf=1&cats=Nayeon,Twice,Dive

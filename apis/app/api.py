@@ -371,7 +371,7 @@ class UpdateCustomData(PostApi, GetApi):
                 except:
                     continue
 
-                name = f"{base}_{i}_{m}_2x"
+                name = f"{base}_{i}_{m}_4x"
                 if f"{name}{v}" in rs:
                     repetidos.append(name)
                     continue

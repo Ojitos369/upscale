@@ -33,7 +33,7 @@ class UpdateInitData(PostApi, GetApi):
             "4n8hl": "4xNomos8kHAT-L_otf",
             "4ffd": "4xFrankendata_FullDegradation_g_460000",
             "4n8sc": "4xNomos8kSC",
-            "4ld": "4XLSDIRDAT",
+            # "4ld": "4XLSDIRDAT",
             "4lpn": "4xLSDIRplusN",
             "4nurm": "4xNomosUni_rgt_multijpg",
             "4nud": "4xNomosUniDAT otf",
@@ -59,7 +59,7 @@ class UpdateInitData(PostApi, GetApi):
             "d4": "DAT x4",
             "pp": "4xPurePhoto-span",
             "4fu": "4xFaceUPDAT",
-            "4ld": "4XLSDIRDAT",
+            # "4ld": "4XLSDIRDAT",
             # "fr": "4x_foolhardy_Remacri",
             # "pp": "4xPurePhoto-span",
             # "snp": "ScuNet PSNR",
@@ -306,7 +306,7 @@ class UpdateCustomData(PostApi, GetApi):
             "d4": "DAT x4",
             "pp": "4xPurePhoto-span",
             "4fu": "4xFaceUPDAT",
-            "4ld": "4XLSDIRDAT",
+            # "4ld": "4XLSDIRDAT",
         }
 
         # ?bs=tw_dvi_1&ctdi=1&ctdf=1&cats=Nayeon,Twice,Dive

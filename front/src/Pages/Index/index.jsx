@@ -22,7 +22,6 @@ const Index = props => {
             return p;
         }
     }, [s.app?.paginador?.pagina]);
-    const por_pagina = useMemo(() => s.app?.paginador?.por_pagina || 20, [s.app?.paginador?.por_pagina]);
 
     const updatePage = page => {
         f.u2('app', 'paginador', 'pagina', page);
@@ -32,10 +31,6 @@ const Index = props => {
     useEffect(() => {
         f.app.getCategorias();
     }, []);
-
-    useEffect(() => {
-        f.app.getImages();
-    }, [s.app?.filtros, pagina, por_pagina]);
 
     if (gettingImages) {
         return (

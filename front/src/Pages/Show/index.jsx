@@ -21,9 +21,8 @@ const Show = props => {
     };
 
     useEffect(() => {
-        // f.u2('app', 'filtros', 'group', group);
         f.app.getGroupImages(group);
-    }, [group]);
+    }, []);
 
     return (
         <div className='flex flex-wrap justify-around mb-5'>

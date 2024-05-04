@@ -56,13 +56,13 @@ class UpdateInitData(PostApi, GetApi):
         
         models = {
             "scu": "ScUNET",
-            "d4": "DAT x4",
-            "pp": "4xPurePhoto-span",
             "4fu": "4xFaceUPDAT",
+            "snp": "ScuNet PSNR",
+            # "d4": "DAT x4",
+            # "pp": "4xPurePhoto-span",
             # "4ld": "4XLSDIRDAT",
             # "fr": "4x_foolhardy_Remacri",
             # "pp": "4xPurePhoto-span",
-            # "snp": "ScuNet PSNR",
             # "d4": "DAT x4",
             # "re4p": "R-ESRGAN 4x+",
         }
@@ -299,14 +299,14 @@ class UpdateCustomData(PostApi, GetApi):
         models = {
             # "fr": "4x_foolhardy_Remacri",
             # "pp": "4xPurePhoto-span",
-            # "snp": "ScuNet PSNR",
             # "d4": "DAT x4",
             # "re4p": "R-ESRGAN 4x+",
-            "scu": "ScUNET",
-            "d4": "DAT x4",
-            "pp": "4xPurePhoto-span",
-            "4fu": "4xFaceUPDAT",
+            # "d4": "DAT x4",
+            # "pp": "4xPurePhoto-span",
             # "4ld": "4XLSDIRDAT",
+            "4fu": "4xFaceUPDAT",
+            "scu": "ScUNET",
+            "snp": "ScuNet PSNR",
         }
 
         # ?bs=tw_dvi_1&ctdi=1&ctdf=1&cats=Nayeon,Twice,Dive

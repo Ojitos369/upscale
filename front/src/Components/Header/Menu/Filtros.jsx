@@ -173,6 +173,7 @@ const Filtros = props => {
                         onClick={e => {
                             e.preventDefault();
                             f.u2('menu', 'filtros', 'filtros', {});
+                            f.u1('app', 'filtros', {});
                         }}
                         >
                         Limpiar Filtros

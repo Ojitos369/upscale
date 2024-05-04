@@ -29,7 +29,7 @@ const Index = props => {
 
 
     useEffect(() => {
-        f.app.getCategorias();
+        f.u2('app', 'show', 'images', null);
     }, []);
 
     if (gettingImages) {

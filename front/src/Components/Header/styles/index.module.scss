@@ -44,12 +44,23 @@
         }
     }
 }
+.closeAction {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    cursor: pointer;
+    svg {
+        width: 35px;
+        height: 35px;
+    }
+}
 
 .login, .filtros {
     .input_element {
         margin-top: 3px;
         display: flex;
         flex-direction: column;
+
         .input_label {
             padding: 2px 4px;
         }
@@ -68,13 +79,16 @@
     .submit_element {
         margin-top: 25px;
         width: 100%;
-        display: flex;
-        justify-content: center;
         .input_button {
-            width: 40%;
-            padding: 5px 10px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 0;
+            height: 45px;
             border-radius: 8px;
             box-shadow: 0 0 0 0;
+            text-align: center;
         }
     }
     .error_message {

@@ -16,6 +16,7 @@
     .my_modal {
         border: 1px var(--my-minor) solid;
     }
+
     .modal_container {
         margin-top: 10vh;
         min-height: 15vh;
@@ -23,7 +24,7 @@
         border-radius: 15px;
         animation: fadeIn .4s;
         width: 80%;
-        overflow: hidden;
+        overflow: scroll;
         overflow-y: scroll;
         position: relative;
         background: var(--my-major);

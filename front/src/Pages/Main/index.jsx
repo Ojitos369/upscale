@@ -20,6 +20,10 @@ const Main = props => {
     const por_pagina = useMemo(() => s.app?.paginador?.por_pagina || 20, [s.app?.paginador?.por_pagina]);
 
     useEffect(() => {
+        f.app.getCategorias();
+    }, []);
+
+    useEffect(() => {
         f.app.getImages();
     }, [s.app?.filtros, pagina, por_pagina]);
 

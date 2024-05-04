@@ -87,6 +87,7 @@ const useF = props => {
             u2('loaders', 'app', 'getImages', true);
 
             let filtros = {...s.app?.filtros || {}};
+            // console.log('filtros', filtros);
             const paginador = {...s.app?.paginador || {}};
             const pagina = paginador.pagina || 1;
             const por_pagina = paginador.por_pagina || 20;
@@ -98,11 +99,36 @@ const useF = props => {
             let end = `app/get_images/?pagina=${pagina}&por_pagina=${por_pagina}`;
 
             if (!!filtros.cats) {
-                if ((filtros.cats || []).length > 0) {
-                    // join cats with ',
-                    const cats = filtros.cats.join(',');
-                    end += `&cats=${cats}`;
+                if (typeof filtros.cats === 'list') {
+                    if ((filtros.cats || []).length > 0) {
+                        // join cats with ',
+                        const cats = filtros.cats.join(',');
+                        end += `&cats=${cats}`;
+                    }
+                } else {
+                    end += `&cats=${filtros.cats}`;
                 }
+            }
+            if (!!filtros.name) {
+                end += `&name=${filtros.name}`;
+            }
+            if (!!filtros.model) {
+                end += `&model=${filtros.model}`;
+            }
+            if (!!filtros.fi) {
+                end += `&fi=${filtros.fi}`;
+            }
+            if (!!filtros.ff) {
+                end += `&ff=${filtros.ff}`;
+            }
+            if (!!filtros.scale) {
+                end += `&scale=${filtros.scale}`;
+            }
+            if (!!filtros.gi) {
+                end += `&gi=${filtros.gi}`;
+            }
+            if (!!filtros.gg) {
+                end += `&gg=${filtros.gg}`;
             }
 
             miAxios.get(end)
@@ -146,8 +172,13 @@ const useF = props => {
             });
         },
         getGroupImages: grupo => {
+            if (!!s.loaders?.app?.getGroupImages) return;
+
+            u2('loaders', 'app', 'getGroupImages', true);
+
             if (!!s.app?.data?.grupos[grupo]) {
                 u2('app', 'show', 'images', s.app?.data?.grupos[grupo]);
+                u2('loaders', 'app', 'getGroupImages', false);
             } else {
                 const end = `app/get_images/?gi=${grupo}`;
                 const data = { grupo };
@@ -158,6 +189,8 @@ const useF = props => {
                 })
                 .catch(err => {
                     console.log(err);
+                }).finally(() => {
+                    u2('loaders', 'app', 'getGroupImages', false);
                 });
             }
         },

@@ -17,7 +17,7 @@ const ListenKeys = props => {
 const GeneralModal = props => {
     const { s, f } = useStates();
     const { Component, lvl1, lvl2 } = props;
-    const keyExec = !!s.modals?.[lvl1]?.[lvl2];
+    const keyExec = props.keyExec ?? !!s.modals?.[lvl1]?.[lvl2];
     const ztyle = props.zindex ? {zIndex: props.zindex} : {};
 
     const close = () => {

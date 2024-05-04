@@ -8,36 +8,42 @@ import { ChevronsLeft } from '../../Icons';
 const ListenKeys = props => {
     const { keyExec } = props;
     // ---------------------------------------------   KEYBOARD EVENTS   --------------------------------------------- #
-    useKeyDown(props.unLogin, ['escape'], keyExec);
+    useKeyDown(props.closeFiltros, ['escape'], keyExec);
     useKeyUp(null, ['any'], keyExec);
     // ---------------------------------------------   /KEYBOARD EVENTS   --------------------------------------------- #
 
     return null;
 }
 
-const Login = props => {
+const Filtros = props => {
     const { s, f } = useStates();
     const { styles } = props;
-    const keyExec = s.menu?.modal?.mode === 'login';
-    const messageError = useMemo(() => s.menu?.login?.error || '', [s.menu?.login?.error]);
-    const loging = useMemo(() => !!s.loaders?.login?.login || '', [s.loaders?.login?.login]);
-    // const messageError = s.menu?.login?.error || '';
+    const keyExec = s.menu?.modal?.mode === 'filtros';
+    const messageError = useMemo(() => s.menu?.filtros?.error || '', [s.menu?.filtros?.error]);
+    const loading = useMemo(() => !!s.loaders?.filtros?.filtros || '', [s.loaders?.filtros?.filtros]);
+    const filtros = useMemo(() => !!s.menu?.filtros?.filtros || '', [s.menu?.filtros?.filtros]);
+    // const messageError = s.menu?.filtros?.error || '';
 
-    const unLogin = () => {
-        console.log("saliendo login")
+    const closeFiltros = () => {
+        console.log("saliendo filtros")
         f.u2('menu', 'modal', 'mode', 'menu');
     }
 
-    const login = e => {
+    const filtrar = e => {
         if (!!e) e.preventDefault();
-        f.login.login();
+        f.u1('app', 'filtros', {...s.app?.filtros, ...s.menu?.filtros});
+        closeFiltros();
+    }
+
+    const updateFiltros = e => {
+        f.u3('menu', 'filtros', 'filtros', e.target.name, e.target.value);
     }
 
     useEffect(() => {
-        f.u2('menu', 'login', 'error', '');
+        f.u2('menu', 'filtros', 'error', '');
     }, []);
 
-    if (loging) {
+    if (loading) {
         return (
             <div className='my-5 w-full flex justify-center'>
                 <Stair />
@@ -50,40 +56,31 @@ const Login = props => {
             {keyExec && 
             <ListenKeys 
                 keyExec={keyExec}
-                unLogin={unLogin}
+                closeFiltros={closeFiltros}
             />}
             <span className='w-[30px] m-3'>
                 <ChevronsLeft
-                    onClick={unLogin}
+                    onClick={closeFiltros}
                     />
             </span>
+
+            {/* name, model, fi, ff, scale, gi, gg, cats, por_pagina */}
             <form 
-                className={`${styles.login} w-full flex flex-col items-center mt-2`}
-                onSubmit={login}
+                className={`${styles.filtros} w-full flex flex-col items-center mt-2`}
+                onSubmit={filtrar}
                 >
                 <p className='w-full text-center text-3xl font-bold'>
-                    Login
+                    Filtros
                 </p>
 
                 <div className={`${styles.input_element}`}>
-                    <label className={`${styles.input_label}`} htmlFor="">User</label>
+                    <label className={`${styles.input_label}`} htmlFor="">Nombre</label>
                     <input 
                         className={`${styles.input}`} 
                         type="text"
-                        name='user'
-                        value={s.menu?.login?.user || ''}
-                        onChange={e => f.u2('menu', 'login', 'user', e.target.value)}
-                        />
-                </div>
-
-                <div className={`${styles.input_element}`}>
-                    <label className={`${styles.input_label}`} htmlFor="">Password</label>
-                    <input 
-                        className={`${styles.input}`} 
-                        type="password"
-                        name='password'
-                        value={s.menu?.login?.password || ''}
-                        onChange={e => f.u2('menu', 'login', 'password', e.target.value)}
+                        name='name'
+                        value={s.menu?.filtros?.name || ''}
+                        onChange={updateFiltros}
                         />
                 </div>
 
@@ -91,7 +88,7 @@ const Login = props => {
                     <input
                         type='submit'
                         className={`${styles.input_button} bg-blue-500 hover:bg-blue-600`}
-                        value='Login'
+                        value='Filtros'
                         />
                 </div>
 
@@ -107,4 +104,4 @@ const Login = props => {
     )
 }
 
-export { Login }
+export { Filtros }

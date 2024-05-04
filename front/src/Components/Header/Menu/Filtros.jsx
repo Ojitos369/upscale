@@ -169,7 +169,7 @@ const Filtros = props => {
                         />
                     
                     <span 
-                        className={`${styles.input_button} bg-red-500 hover:bg-red-600 w-8/12 md:w-1/4 mb-6`}
+                        className={`manita ${styles.input_button} bg-red-500 hover:bg-red-600 w-8/12 md:w-1/4 mb-6`}
                         onClick={e => {
                             e.preventDefault();
                             f.u2('menu', 'filtros', 'filtros', {});

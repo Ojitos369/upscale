@@ -45,26 +45,16 @@ const Show = props => {
 
     return (
         <div className='flex flex-wrap justify-around mb-5'>
-            <h2 className='w-full text-center mt-5 text-2xl font-bold'>
+            <h2 className='w-full text-center mt-5 text-4xl font-bold'>
                 {group}
             </h2>
-            <div className='mt-8 mx-5 w-auto flex flex-col items-center'>
+            <div className='w-10/12 flex flex-col items-center mt-4'>
                 <Phone image={images[0]} />
-                <div className={`${styles.downloadLabel} text-start border rounded-lg px-4 py-2 mt-2 w-full`}>
-                    <a href={images[0].url} target='_blank' rel='noreferrer' className='text-blue-500 underline w-10/12'>
-                        {images[0].name} - {images[0].scale}
-                    </a>
-                    <span className={`${styles.downloadIcon}`}>
-                        <DownloadIcon onClick={() => download(images[0].url)} />
-                    </span>
-                </div>
+            </div>
+            <div className='mt-8 w-11/12 mx-5 flex flex-col items-center lg:flex-row lg:flex-wrap lg:justify-center' >
                 {images.map((image, index) => {
-                    if (index === 0) {
-                        return null;
-                    }
                     return (
-                        <div className='mt-8 mx-5 w-full flex flex-col items-center' key={index}>
-                        <div className={`${styles.downloadLabel} text-start border rounded-lg px-4 py-2 mt-2 w-full`}>
+                        <div className={`${styles.downloadLabel} text-start border rounded-lg px-5 py-3 mb-4 mx-3 w-8/12 lg:w-1/4`} key={index}>
                             <a href={image.url} target='_blank' rel='noreferrer' className='text-blue-500 underline w-10/12'>
                                 {image.name} - {image.scale}
                             </a>
@@ -72,7 +62,6 @@ const Show = props => {
                                 <DownloadIcon onClick={() => download(images[0].url)} />
                             </span>
                         </div>
-                    </div>
                     )
                 })}
             </div>

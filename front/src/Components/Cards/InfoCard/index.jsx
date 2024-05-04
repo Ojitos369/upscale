@@ -27,12 +27,12 @@ const InfoCard = props => {
 
     return (
         <div className={`${styles.cardInfo_container} mt-10`}>
-            <div className={`${styles.cardInfo_head}`}
+            <Link to={`show/${group_image}`} className={`${styles.cardInfo_head}`}
                 style={stylesBanner}>
                 <span className={`${styles.cardInfo_head_span}`}>
                     {showDate(fecha_carga)}
                 </span>
-            </div>
+            </Link>
             <div className={`${styles.cardInfo_body}`}>
                 <h4 className={`${styles.cardInfo_title}`}>
                     <Link to={`show/${group_image}`}>

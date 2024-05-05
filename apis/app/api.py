@@ -513,6 +513,8 @@ class GetImages(GetApi):
         
         if scale:
             scale = self.normalize_text(scale).lower()
+            if not scale.endswith("x"):
+                scale += "x"
             filtros += "AND lower(i.scale) = '{0}'\n".format(scale)
         
         if group_image:
@@ -567,6 +569,8 @@ class GetImages(GetApi):
 
         filtros_paginacion = ""
         if por_pagina:
+            if not pagina:
+                pagina = 1
             offset = (pagina - 1) * por_pagina # 0
             filtros_paginacion += f"LIMIT {por_pagina} OFFSET {offset}\n"
             
@@ -641,6 +645,8 @@ class GetImages(GetApi):
             if i["group_image"] not in grupos:
                 grupos[i["group_image"]] = []
             grupos[i["group_image"]].append(i)
+            
+        # print(grupos)
         
         self.response = {
             # "images": images,

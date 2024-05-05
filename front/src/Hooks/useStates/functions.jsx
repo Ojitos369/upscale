@@ -153,10 +153,15 @@ const useF = props => {
                         });
                     });
                 });
+                // console.log(cats);
                 // console.log(grupos);
                 const originales = Object.keys(grupos).map(k => {
                     const grupo = grupos[k];
+                    console.log(cats, k, grupo);
                     let ng = grupo.filter(i => i.model === 'Original')[0];
+                    if (!ng) {
+                        ng = grupo[0];
+                    }
                     ng.categorias = cats[k];
                     return ng;
                 })

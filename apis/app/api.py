@@ -134,7 +134,7 @@ class UpdateInitData(PostApi, GetApi):
 
             for i in range(1, b["cantidad"] + 1):
                 group = name = f"{b['name']}_{i}"
-                link = f"https://ojitos369.com/media/twice/ups/{name}.jpg"
+                link = f"https://storage.googleapis.com/ojitos369_ups/{name}.jpg"
                 item = {"name": name, "link": link, "model": "Original", "scale": 1, "group": group, "general_group": general_group}
                 
                 if "cats" in b:
@@ -151,7 +151,7 @@ class UpdateInitData(PostApi, GetApi):
                         continue
                     
                     name = f"{b['name']}_{i}_{k}_2x"
-                    link = f"https://ojitos369.com/media/twice/ups/{name}.png"
+                    link = f"https://storage.googleapis.com/ojitos369_ups/{name}.png"
                     item = {"name": name, "link": link, "model": v, "scale": 4, "group": group, "general_group": general_group}
                     
                     if "cats" in b:
@@ -357,7 +357,7 @@ class UpdateCustomData(PostApi, GetApi):
         for i in my_range:
             group = name = f"{base}_{i}"
             
-            link = f"https://ojitos369.com/media/twice/ups/{name}.jpg"
+            link = f"https://storage.googleapis.com/ojitos369_ups/{name}.jpg"
             item = {"name": name, "link": link, "model": "Original", "scale": 1, "group": group, "general_group": general_group}
             item["categorias"] = cats
 
@@ -376,7 +376,7 @@ class UpdateCustomData(PostApi, GetApi):
                     repetidos.append(name)
                     continue
             
-                link = f"https://ojitos369.com/media/twice/ups/{name}.png"
+                link = f"https://storage.googleapis.com/ojitos369_ups/{name}.png"
                 item = {"name": name, "link": link, "model": v, "scale": 4, "group": group, "general_group": general_group}
                 item["categorias"] = cats
 
@@ -763,7 +763,7 @@ class CreateImageUpscale(PostApi):
                         ('{0}', '{1}', '{2}', now(), '{3}', '{4}', '{5}')
                     """
             
-            url_base = f"https://ojitos369.com/media/twice/ups/"
+            url_base = f"https://storage.googleapis.com/ojitos369_ups/"
             
             qc = """SELECT id_categoria
                         FROM categorias

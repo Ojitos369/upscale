@@ -7,19 +7,23 @@ const Phone = props => {
     const { f } = useStates();
     const fecha = new Date();
 
-    const { image, to, Link, block, fecha_carga, Extra, extraProps } = props;
+    const { image, to, Link, block, fecha_carga, Extra, extraProps, alone } = props;
 
     const { url, name, id_image } = image;
     const unique = `phone-${name}-${id_image}`;
 
-    const cardClassName = `
+    const cardClassName = !alone ? `
         ${styles.phone_container}
         w-[90vw] h-[160.0000vw]
         sm:w-[60vw] sm:h-[106.66666666666666vw]
         md:w-[30vw] md:h-[53.33333333333333vw]
         lg:w-[20vw] lg:h-[35.55555555555556vw]
         xl:w-[10vw] xl:h-[17.77777777777778vw]
-    `;
+    ` :
+    `
+        ${styles.phone_container}
+        w-[15vw] h-[26.666666666666664vw]
+    ` 
     const cardStyle = {
         backgroundImage: `url(${url})`,
         backgroundSize: 'cover',

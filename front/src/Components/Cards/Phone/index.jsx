@@ -1,40 +1,89 @@
 import { useEffect, useState } from "react";
 import { useStates } from "../../../Hooks/useStates";
+import { FingerPrint } from "../../Icons";
+import styles from '../styles/phone_card.module.scss';
+
 const Phone = props => {
     const { f } = useStates();
-    const { image } = props;
-    // console.log(image);
+    const fecha = new Date();
+
+    const { image, to, Link, block, fecha_carga, Extra, extraProps } = props;
+
     const { url, name, id_image } = image;
     const unique = `phone-${name}-${id_image}`;
 
+    const cardClassName = `
+        ${styles.phone_container}
+        w-[30vw] h-[53.33333333333333vw]
+        md:w-[25vw] md:h-[44.44444444444444vw]
+        lg:w-[20vw] lg:h-[35.55555555555556vw]
+        xl:w-[15vw] xl:h-[26.666666666666664vw]
+    `;
+    const cardStyle = {
+        backgroundImage: `url(${url})`,
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+        backgroundRepeat: 'no-repeat'
+    }
+
+    if (!!to && !!Link) {
+        return (
+            <Link 
+                className={cardClassName}
+                style={cardStyle}
+                to={to}
+                id={unique}
+            >
+                <Content fecha={fecha_carga} block={block} Extra={Extra} extraProps={extraProps}/>
+            </Link>
+        )
+    }
+
     return (
         <div 
-            className={
-                `relative 
-                w-[45vw] md:w-[35vw] lg:w-[15vw] 
-                h-[auto] md:h-[auto] lg:h-[auto]
-                flex justify-center border border-4 border-black rounded-2xl ${unique}`
-            }
+            className={cardClassName}
+            style={cardStyle}
             id={unique}
-            >
-            <img 
-                src={url} alt={name} 
-                className={
-                    `w-[45vw] md:w-[35vw] lg:w-[15vw] 
-                    h-[80vw] md:h-[70vw] lg:h-[30vw]
-                    rounded-2xl`
-                }
-                style={{
-                    boxShadow: '0 0 10px 5px rgba(0, 0, 0, 0.5)',
-                    objectFit: 'cover',
-                    objectPosition: 'center'
-                }}
-                />
-            <span className="border border-black bg-black right-[18%] w-[auto] rounded-br-xl rounded-bl-xl z-10"></span>
-            <span className="absolute right-[10%] top-3 bg-black border-5 border-black h-6 w-6 rounded-[50%]"></span>
-            {/* <span className="absolute -right-3 top-20 bg-black border-5 border-black h-14 w-3 rounded-lg"></span>
-            <span className="absolute -right-3 top-64 bg-black border-5 border-black h-20 w-3 rounded-lg"></span> */}
+        >
+            <div className={`
+                ${styles.bg_defoque}
+            `}>
+                <Content fecha={fecha} block={block} Extra={Extra} extraProps={extraProps}/>
+            </div>
         </div>
+    )
+}
+
+
+const Content = props => {
+    const { fecha, block, Extra, extraProps } = props;
+    return (
+        <>
+            {block ?
+            <>
+                <p className={`${styles.hora}`}>
+                    {fecha.getHours().toString().padStart(2, '0')} : {fecha.getMinutes().toString().padStart(2, '0')}
+                </p>
+                <p className={`${styles.fecha}`}>
+                    {fecha.getDate().toString().padStart(2, '0')}/{fecha.getMonth().toString().padStart(2, '0')}/{fecha.getFullYear()}
+                </p>
+                <p className={`${styles.unlock}`}>
+                    <span className={`${styles.icon}`}>
+                        <FingerPrint />
+                    </span>
+                    <span className={`${styles.text}`}>
+                        Desbloquear
+                    </span>
+                </p>
+            </> : 
+            <div className={`${styles.nav}`}>
+                <p className={`${styles.hora}`}>
+                    {fecha.getDate().toString().padStart(2, '0')}/{fecha.getMonth().toString().padStart(2, '0')}/{fecha.getFullYear()}
+                </p>
+            </div>
+            }
+            {Extra && <Extra {...extraProps}/>}
+        </>
     )
 }
 

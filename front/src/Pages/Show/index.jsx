@@ -1,6 +1,6 @@
 import { useEffect, useMemo } from 'react';
 import { useStates } from '../../Hooks/useStates';
-import { Phone } from '../../Components/Cards/Phone';
+import { BlockPhone } from '../../Components/Cards/BlockPhone';
 import { DownloadIcon } from '../../Components/Icons';
 import { DobleLoader } from '../../Components/Loaders/DobleLoader';
 import styles from './styles/index.module.scss';
@@ -49,7 +49,7 @@ const Show = props => {
                 {group}
             </h2>
             <div className='w-10/12 flex flex-col items-center mt-4'>
-                <Phone image={images[0]} />
+                <BlockPhone image={images[0]} block={true} />
             </div>
             <div className='mt-8 w-11/12 mx-5 flex flex-col items-center lg:flex-row lg:flex-wrap lg:justify-center' >
                 {images.map((image, index) => {

@@ -1,23 +1,6 @@
-.cardInfo_container {
-    display: flex;
-    flex-direction: column;
-    justify-content: start;
-    align-items: center;
-
-    width: 280px;
-    height: 500px;
-    border-radius: 15px;
-    // border: var(--my-minor) solid 1px;
-    box-shadow: 0 0 15px 0 var(--my-primary);
-    overflow: hidden;
+.cardInfo {
+    position: relative;
     &:hover {
-        overflow-y: scroll;
-
-        &::-webkit-scrollbar {
-            width: 3px !important;
-            height: 3px !important;
-        }
-
         .cardInfo_title {
             a {
                 text-align: center;
@@ -36,27 +19,20 @@
         }
     }
 
-    .cardInfo_head {
-        display: flex;
-        justify-content: end;
-        align-items: start;
-        width: 100%;
-        height: 390px;
-        .cardInfo_head_span {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 10px;
-            width: auto;
-            background-color: #0006;
-            border-radius: 0 0 0 15px;
-            color: #fff;
-        }
-    }
-    .cardInfo_body {
-        width: 100%;
-        height: 150px;
+    .cardInfo_info {
+        height: 130px;
         padding: 15px;
+        overflow: hidden;
+        position: absolute;
+        bottom: 1px;
+        background-color: #0007;
+        border-radius: 0 0 20px 20px;
+        width: 100%;
+
+        &:hover {
+            overflow-y: scroll;
+        }
+
         .cardInfo_title {
             width: 100%;
             font-size: 1.5rem;
@@ -64,7 +40,7 @@
             margin-bottom: 3px;
             a {
                 text-decoration: none;
-                color: var(--my-primary);
+                color: #fff;
             }
         }
         .cardInfo_description {

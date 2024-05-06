@@ -148,7 +148,8 @@ https://sweetalert2.github.io/#ajax-request`),ky(d),typeof d.title=="string"&&(d
     `,C={backgroundImage:`url(${p})`,backgroundSize:"cover",backgroundPosition:"center",backgroundRepeat:"no-repeat"};return!!r&&!!o?b(o,{className:k,style:C,to:r,id:v,children:b(Up,{fecha:a,block:i,Extra:u,extraProps:c})}):b("div",{className:k,style:C,id:v,children:b("div",{className:`
                 ${Ht.bg_defoque}
             `,children:b(Up,{fecha:t,block:i,Extra:u,extraProps:c})})})},Up=e=>{const{fecha:t,block:n,Extra:r,extraProps:o}=e;return B(Zt,{children:[n?B(Zt,{children:[B("p",{className:`${Ht.hora}`,children:[t.getHours().toString().padStart(2,"0")," : ",t.getMinutes().toString().padStart(2,"0")]}),B("p",{className:`${Ht.fecha}`,children:[t.getDate().toString().padStart(2,"0"),"/",t.getMonth().toString().padStart(2,"0"),"/",t.getFullYear()]}),B("p",{className:`${Ht.unlock}`,children:[b("span",{className:`${Ht.icon}`,children:b(Zg,{})}),b("span",{className:`${Ht.text}`,children:"Desbloquear"})]})]}):b("div",{className:`${Ht.nav}`,children:B("p",{className:`${Ht.hora}`,children:[t.getDate().toString().padStart(2,"0"),"/",t.getMonth().toString().padStart(2,"0"),"/",t.getFullYear()]})}),r&&b(r,{...o})]})},MC=e=>{const{f:t}=ge(),{name:n,url:r,fecha_carga:o,model:i,scale:a,group_image:u,general_group:c,upscales:p,Link:h,categorias:m}=e,v=A.exports.useMemo(()=>m.filter(_=>!["1x","original"].includes(_.nombre.toLowerCase())),[m]),[k,C]=A.exports.useState(new Date),P=`
-        w-[30vw] h-[53.33333333333333vw]
+        w-[50vw] h-[88.88888888888889vw]
+        sm:w-[30vw] sm:h-[53.33333333333333vw]
         md:w-[25vw] md:h-[44.44444444444444vw]
         lg:w-[20vw] lg:h-[35.55555555555556vw]
         xl:w-[15vw] xl:h-[26.666666666666664vw]

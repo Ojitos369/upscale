@@ -18,8 +18,11 @@ const BlockPhone = props => {
         <div 
             className={`
                 ${styles.block_phone_container}
-                w-[30vw] h-[53.33333333333333vw]
-                lg:w-[15vw] lg:h-[26.666666666666664vw]
+                w-[50vw] h-[88.88888888888889vw]
+                sm:w-[30vw] sm:h-[53.33333333333333vw]
+                md:w-[25vw] md:h-[44.44444444444444vw]
+                lg:w-[20vw] lg:h-[35.55555555555556vw]
+                xl:w-[15vw] xl:h-[26.666666666666664vw]
             `}
             style={{
                 backgroundImage: `url(${url})`,

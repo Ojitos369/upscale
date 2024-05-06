@@ -21,6 +21,13 @@ const InfoCard = props => {
         lg:w-[20vw] lg:h-[35.55555555555556vw]
         xl:w-[15vw] xl:h-[26.666666666666664vw]
     `;
+    const cardInfoClassName = `
+        w-[50vw]
+        sm:w-[30vw]
+        md:w-[25vw]
+        lg:w-[20vw]
+        xl:w-[15vw]
+    `;
 
     useEffect(() => {
         let fecha = new Date(fecha_carga);
@@ -37,7 +44,7 @@ const InfoCard = props => {
                 block={false}
                 fecha_carga={fechaCarga}
                 />
-            <div className={`${styles.cardInfo_info} flex flex-col items-center`}>
+            <div className={`${styles.cardInfo_info} ${cardInfoClassName} flex flex-col items-center`}>
                 <h4 className={`${styles.cardInfo_title}`}>
                     <Link to={`show/${group_image}`}>
                         {name} <span className='text-sm font-normal ml-5'>{general_group}</span>

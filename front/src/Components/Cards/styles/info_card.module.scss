@@ -1,5 +1,6 @@
 .cardInfo {
     position: relative;
+    overflow: hidden;
     &:hover {
         .cardInfo_title {
             a {
@@ -30,7 +31,7 @@
         width: 100%;
 
         &:hover {
-            overflow-y: scroll;
+            overflow: scroll;
         }
 
         .cardInfo_title {

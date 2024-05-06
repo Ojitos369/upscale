@@ -37,7 +37,7 @@ const InfoCard = props => {
                 block={false}
                 fecha_carga={fechaCarga}
                 />
-            <div className={`${styles.cardInfo_info} w-full flex flex-col items-center`}>
+            <div className={`${styles.cardInfo_info} ${cardClassName} flex flex-col items-center`}>
                 <h4 className={`${styles.cardInfo_title}`}>
                     <Link to={`show/${group_image}`}>
                         {name} <span className='text-sm font-normal ml-5'>{general_group}</span>

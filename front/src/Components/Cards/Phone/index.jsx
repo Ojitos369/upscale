@@ -22,7 +22,9 @@ const Phone = props => {
     ` :
     `
         ${styles.phone_container}
-        w-[15vw] h-[26.666666666666664vw]
+        w-[90vw] h-[160.0000vw]
+        sm:w-[60vw] sm:h-[106.66666666666666vw]
+        md:w-[30vw] md:h-[53.33333333333333vw]
     ` 
     const cardStyle = {
         backgroundImage: `url(${url})`,

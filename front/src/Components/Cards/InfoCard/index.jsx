@@ -61,7 +61,7 @@ const Extra = props => {
     const { cats, f } = props;
 
     return (
-        <div className={`${styles.cardInfo_categorias} flex flex-wrap w-full`}>
+        <div className={`${styles.cardInfo_categorias} flex flex-wrap`}>
             {(cats || []).map((topic, index) => {
                 const Icon = topic.icon;
                 return (

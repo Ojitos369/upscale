@@ -41,7 +41,7 @@ const Index = props => {
     }
 
     return (
-        <div className='flex flex-wrap justify-center mb-5'>
+        <div className='flex flex-wrap justify-center pb-8'>
             <Paginacion
                 no_paginas={paginas || 1}
                 pagina={pagina}

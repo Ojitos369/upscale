@@ -165,7 +165,7 @@ const Filtros = props => {
                     <input
                         type='submit'
                         className={`${styles.input_button} bg-blue-500 hover:bg-blue-600 w-8/12 md:w-1/4 mb-6`}
-                        value='Filtros'
+                        value='Filtrar'
                         />
                     
                     <span 

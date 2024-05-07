@@ -40,7 +40,7 @@ const InfoCard = props => {
     }, [fecha_carga]);
 
     return (
-        <div className={`${styles.cardInfo} ${cardClassName} w-full flex flex-col items-center mx-5 mb-12`}>
+        <div className={`${styles.cardInfo} ${cardClassName} w-full flex flex-col items-center mx-5 mt-12`}>
             <Phone 
                 image={{url, name, id_image: group_image}}
                 to={`show/${group_image}`}

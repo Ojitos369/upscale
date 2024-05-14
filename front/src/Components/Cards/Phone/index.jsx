@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import { useStates } from "../../../Hooks/useStates";
 import { FingerPrint } from "../../Icons";
 import styles from '../styles/phone_card.module.scss';
@@ -12,7 +12,7 @@ const Phone = props => {
     const { url, name, id_image } = image;
     const unique = `phone-${name}-${id_image}`;
 
-    const cardClassName = !alone ? `
+    const cardClassName = useMemo(() => !alone ? `
         ${styles.phone_container}
         w-[90vw] h-[160.0000vw]
         sm:w-[60vw] sm:h-[106.66666666666666vw]
@@ -25,7 +25,8 @@ const Phone = props => {
         w-[90vw] h-[160.0000vw]
         sm:w-[60vw] sm:h-[106.66666666666666vw]
         md:w-[30vw] md:h-[53.33333333333333vw]
-    ` 
+    `, [alone, styles.phone_container]);
+
     const cardStyle = {
         backgroundImage: `url(${url})`,
         backgroundSize: 'cover',

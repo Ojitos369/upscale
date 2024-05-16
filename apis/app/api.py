@@ -581,9 +581,8 @@ class GetImages(GetApi):
             filtros_paginacion += f"LIMIT {por_pagina} OFFSET {offset}\n"
         
         filtros = ""
-        if cantidad != cantidad_total:
-            group_join = "', '".join([i["group_image"] for i in rc])
-            filtros = "AND lower(i.group_image) in ('{0}')\n".format(group_join)
+        if filtro_categorias:
+            filtros = "AND lower(i.group_image) in ({0})\n".format(qc)
 
         query = """select dt.* from (select t.*
                     from (SELECT i.id_image, i.name, i.url,
@@ -593,11 +592,12 @@ class GetImages(GetApi):
                         i.model, i.scale, i.group_image, i.general_group
                     FROM images i
                     WHERE i.model = 'Original'
+                    {2}
                     {0} ) t
                     order by t.fecha_carga desc, t.general_group, t.group_image, t.name ) dt
                     order by dt.fecha_carga desc, dt.general_group, dt.group_image, dt.name
                     {1}
-                    """.format(filtros, filtros_paginacion)
+                    """.format(filtros, filtros_paginacion, filtros_pre_paginacion)
 
         # print(query)
         r = self.conexion.consulta_asociativa(query)

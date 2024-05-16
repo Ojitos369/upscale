@@ -10,8 +10,6 @@ const Show = props => {
 
     const images = useMemo(() => s.app?.show?.images || [], [s.app?.show?.images]);
     const loading = useMemo(() => s.loaders?.app?.getGroupImages ?? true, [s.loaders?.app?.getGroupImages]);
-    // const images = s.app?.show?.images || [];
-    // console.log(images);
 
     const { group } = useParams();
 

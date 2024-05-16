@@ -234,10 +234,10 @@ class UpdateInitData(PostApi, GetApi):
                 
                 
                 qt = """insert into image_categoria
-                        (image_id, categoria_id)
+                        (image_id, categoria_id, group_image)
                         values
-                        (%s, %s) """
-                qd = (image_id, id_categoria)
+                        (%s, %s, %s) """
+                qd = (image_id, id_categoria, group)
                 if not self.conexion.ejecutar(qt, qd):
                     self.conexion.rollback()
                     raise self.MYE("Error al guardar la categoria")
@@ -455,10 +455,10 @@ class UpdateCustomData(PostApi, GetApi):
                 
                 
                 qt = """insert into image_categoria
-                        (image_id, categoria_id)
+                        (image_id, categoria_id, group_image)
                         values
-                        (%s, %s) """
-                qd = (image_id, id_categoria)
+                        (%s, %s, %s) """
+                qd = (image_id, id_categoria, group)
                 if not self.conexion.ejecutar(qt, qd):
                     self.conexion.rollback()
                     raise self.MYE("Error al guardar la categoria")
@@ -492,68 +492,60 @@ class GetImages(GetApi):
         pagina = get_d(self.data, "pagina", default=1)
         por_pagina = get_d(self.data, "por_pagina", default=25)
 
-        filtros = "WHERE 1=1\n"
-        filtros_pre_paginacion = "WHERE 1=1\n"
-        
+        filtro_categorias = ''
+        filtros_pre_paginacion = ""
+
         if name:
             name = self.normalize_text(name).lower()
-            filtros += "AND lower(i.name) like {0}\n".format(f"'%{name}%'")
             filtros_pre_paginacion += "AND lower(i.name) like {0}\n".format(f"'%{name}%'")
         
         if model:
             model = self.normalize_text(model).lower()
-            filtros += "AND lower(i.model) like {0}\n".format(f"'%{model}%'")
+            filtros_pre_paginacion += "AND lower(i.group_image) in (select distinct group_image from images where lower(modelo) like {0})\n".format(f"'%{model}%'")
         
         if fi:
             # fi dd/mm/yyyy
             # i.date date field
-            filtros += "AND cast(i.fecha as date) >= {0}\n".format(f"'{fi}'")
+            filtros_pre_paginacion += "AND cast(i.fecha as date) >= {0}\n".format(f"'{fi}'")
         if ff:
-            filtros += "AND cast(i.fecha as date) <= {0}\n".format(f"'{ff}'")
+            filtros_pre_paginacion += "AND cast(i.fecha as date) <= {0}\n".format(f"'{ff}'")
         
         if scale:
             scale = self.normalize_text(scale).lower()
             if not scale.endswith("x"):
                 scale += "x"
-            filtros += "AND lower(i.scale) = '{0}'\n".format(scale)
+            filtros_pre_paginacion += "AND lower(i.scale) = '{0}'\n".format(scale)
         
         if group_image:
             group_image = self.normalize_text(group_image).lower()
-            filtros += "AND lower(i.group_image) = '{0}'\n".format(group_image)
+            filtros_pre_paginacion += "AND lower(i.group_image) = '{0}'\n".format(group_image)
         
         if categorias:
             categorias = self.normalize_text(categorias).lower()
             categorias = categorias.replace(", ", ",").split(",")
             cat_join = "', '".join(categorias)
-            filtros += f"""AND i.group_image in (select distinct group_image
-                        FROM images i
-                        JOIN image_categoria ic
-                        ON i.id_image = ic.image_id
-                        JOIN categorias c
-                        ON ic.categoria_id = c.id_categoria
-                        where lower(c.nombre) in ('{cat_join}'))\n """
+            filtro_categorias += f"""WHERE lower(c.nombre) in ('{cat_join}') """
 
         if general_group:
             general_group = self.normalize_text(general_group).lower()
-            filtros += "AND lower(i.general_group) = '{0}'\n".format(general_group)
+            filtros_pre_paginacion += "AND lower(i.general_group) = '{0}'\n".format(general_group)
             
         qc = """select distinct t.group_image
-                    from (SELECT i.id_image, i.name, i.url,
-                                (select min(fecha)
-                                from images
-                                where general_group = i.general_group) fecha_carga,
-                            i.model, i.scale, i.group_image, i.general_group, c.nombre as categoria,
-                            c.bg, c.color
-                        FROM images i
-                            JOIN image_categoria ic
-                                ON i.id_image = ic.image_id
-                            JOIN categorias c
-                                ON ic.categoria_id = c.id_categoria
-                            {0}
-                        ) t
-                    order by t.fecha_carga desc, t.general_group, t.group_image, t.name, t.categoria
-                    """.format(filtros)
-        
+                from (SELECT i.id_image, i.name, i.url,
+                            (select min(fecha)
+                            from images
+                            where general_group = i.general_group) fecha_carga,
+                            i.model, i.scale, i.group_image, i.general_group
+                    FROM images i
+                    WHERE i.model = 'Original'
+                    {1}
+                    ) t
+                inner join image_categoria ic on t.group_image = ic.group_image
+                inner join categorias c on ic.categoria_id = c.id_categoria
+                {0}
+                group by t.group_image
+                    """.format(filtro_categorias, filtros_pre_paginacion)
+
         rc = self.conexion.consulta_asociativa(qc)
         cantidad = len(rc)
         pagina = pagina
@@ -566,61 +558,52 @@ class GetImages(GetApi):
         
         if pagina > paginas:
             pagina = paginas
-
         filtros_paginacion = ""
+
         if por_pagina:
             if not pagina:
                 pagina = 1
             offset = (pagina - 1) * por_pagina # 0
             filtros_paginacion += f"LIMIT {por_pagina} OFFSET {offset}\n"
-            
         
-        
-        query = """select t.*
+        filtros = ""
+        if rc and filtro_categorias:
+            group_join = "', '".join([i["group_image"] for i in rc])
+            filtros = "AND lower(i.group_image) in ('{0}')\n".format(group_join)
+
+        query = """select dt.* from (select t.*
                     from (SELECT i.id_image, i.name, i.url,
-                                (select min(fecha)
-                                from images
-                                where general_group = i.general_group) fecha_carga,
-                            i.model, i.scale, i.group_image, i.general_group, c.nombre as categoria,
-                            c.bg, c.color
-                        FROM images i
-                            JOIN image_categoria ic
-                                ON i.id_image = ic.image_id
-                            JOIN categorias c
-                                ON ic.categoria_id = c.id_categoria
-                            Join (select distinct t1.group_image
-                                    from (select pt.*
-                                        from (SELECT i.id_image, i.name, i.url, 
-                                                (select min(fecha) 
-                                                    from images
-                                                    where general_group = i.general_group
-                                                ) fecha_carga, 
-                                                i.model, i.scale, i.group_image, i.general_group, c.nombre as categoria,
-                                                c.bg, c.color
-                                        FROM images i
-                                        JOIN image_categoria ic
-                                        ON i.id_image = ic.image_id
-                                        JOIN categorias c
-                                        ON ic.categoria_id = c.id_categoria
-                                        {0}) pt
-                                        order by pt.fecha_carga desc, pt.general_group, pt.group_image, pt.name, pt.categoria) t1
-                                        order by t1.fecha_carga desc, t1.general_group, t1.group_image, t1.name, t1.categoria
-                                        {1}
-                                        ) lim
-                                ON i.group_image = lim.group_image
-                            {0}
-                        ) t
-                    order by t.fecha_carga desc, t.general_group, t.group_image, t.name, t.categoria
+                        (select min(fecha)
+                            from images
+                            where general_group = i.general_group) fecha_carga,
+                        i.model, i.scale, i.group_image, i.general_group
+                    FROM images i
+                    WHERE i.model = 'Original'
+                    {0} ) t
+                    order by t.fecha_carga desc, t.general_group, t.group_image, t.name ) dt
+                    order by dt.fecha_carga desc, dt.general_group, dt.group_image, dt.name
+                    {1}
                     """.format(filtros, filtros_paginacion)
 
         # print(query)
         r = self.conexion.consulta_asociativa(query)
         
+        qc = """select distinct t.group_image, c.*
+                from (SELECT distinct i.group_image group_image
+                        FROM images i
+                        WHERE i.model = 'Original'
+                        {0}
+                        ) t
+                inner join image_categoria ic on t.group_image = ic.group_image
+                inner join categorias c on ic.categoria_id = c.id_categoria
+                group by t.group_image, c.nombre""".format(filtros)
+        cats = self.conexion.consulta_asociativa(qc)
+
         images = {}
         for i in r:
             image_id = i["id_image"]
             if image_id not in images:
-                images[image_id] = {
+                data_img = {
                     "id_image": i["id_image"],
                     "name": i["name"],
                     "url": i["url"],
@@ -629,14 +612,20 @@ class GetImages(GetApi):
                     "scale": i["scale"],
                     "group_image": i["group_image"],
                     "general_group": i["general_group"],
-                    "categorias": []
                 }
-            cat = {
-                "nombre": i["categoria"],
-                "bg": i["bg"],
-                "color": i["color"]
-            }
-            images[image_id]["categorias"].append(cat)
+                cats_img = []
+                for c in cats:
+                    if c["group_image"] != i["group_image"]:
+                        continue
+
+                    cat = {
+                        "nombre": c["nombre"],
+                        "bg": c["bg"],
+                        "color": c["color"]
+                    }
+                    cats_img.append(cat)
+                data_img["categorias"] = cats_img
+                images[image_id] = data_img
         
         images = [i for i in images.values()]
         
@@ -656,6 +645,22 @@ class GetImages(GetApi):
             "paginas": paginas,
             "grupos": grupos
         }
+
+
+class GetImageGroup(GetApi):
+    def main(self):
+        self.show_me()
+        self.create_conexion()
+
+        group_image = get_d(self.data, "gi", default=None)
+        
+        query = """SELECt * from images
+                    where lower(group_image) = {0}
+                    """.format(f"'{group_image.lower()}'")
+        
+        query
+        r = self.conexion.consulta_asociativa(query)
+        self.response = {"info": r}
 
 
 class GetCategorias(GetApi):
@@ -835,10 +840,10 @@ class CreateImageUpscale(PostApi):
                     
                     
                     qt = """insert into image_categoria
-                            (image_id, categoria_id)
+                            (image_id, categoria_id, group_image)
                             values
-                            ('{0}', '{1}') """
-                    qd = (image_id, id_categoria)
+                            ('{0}', '{1}', '{2}') """
+                    qd = (image_id, id_categoria, group_image)
                     qrt = qt.format(*qd)
                     if not self.conexion.ejecutar(qrt):
                         self.conexion.rollback()

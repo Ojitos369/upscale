@@ -181,23 +181,18 @@ const useF = props => {
 
             u2('loaders', 'app', 'getGroupImages', true);
 
-            if (!!s.app?.data?.grupos[grupo]) {
-                u2('app', 'show', 'images', s.app?.data?.grupos[grupo]);
+            const end = `app/get_image_group/?gi=${grupo}`;
+            const data = { grupo };
+            miAxios.get(end)
+            .then(res => {
+                const images = res.data.info
+                u2('app', 'show', 'images', images);
+            })
+            .catch(err => {
+                console.log(err);
+            }).finally(() => {
                 u2('loaders', 'app', 'getGroupImages', false);
-            } else {
-                const end = `app/get_images/?gi=${grupo}`;
-                const data = { grupo };
-                miAxios.get(end)
-                .then(res => {
-                    const images = res.data.grupos[grupo]
-                    u2('app', 'show', 'images', images);
-                })
-                .catch(err => {
-                    console.log(err);
-                }).finally(() => {
-                    u2('loaders', 'app', 'getGroupImages', false);
-                });
-            }
+            });
         },
         validateUrl: (url, setUrl) => {
             // view if url return 200
